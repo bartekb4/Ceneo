@@ -13,8 +13,8 @@ public class Main {
         DataProcessor dp=new DataProcessor();
         //System.out.println(dp.search_soup);
         cc.send_search_request(url);
-        dp.find_best_product_ids();
-       // dp.request_product_soup();
+       // dp.find_best_product_ids();
+        dp.request_product_soup();
     }
 
    }

@@ -22,19 +22,19 @@ public class DataProcessor {
     private List<String> valuesList=new ArrayList<String>();
     private List <String> urlList=new ArrayList<>();
     private List<Double> pricesList=new ArrayList<>();
+    private List<Double> starList=new ArrayList<>();
+    private List<String> opinionList=new ArrayList<>();
 
 
     public String find_best_product_ids() throws IOException, ParseException { //tu sie dzieje scraping
         search_soup = ceneoAPIHandler.send_search_request(ceneoAPIHandler.url);
-        String id=null;
-        Elements titles=search_soup.getElementsByClass("js_seoUrl go-to-product btn btn-primary btn-cat btn-cta js_force-conv js_clickHash");
+
+        Elements titles=search_soup.getElementsByClass
+                ("js_seoUrl go-to-product btn btn-primary btn-cat btn-cta js_force-conv js_clickHash");
         for (Element t:titles) {
             titlesList.add(t.attr("title")); //dodaje do listy wszysytkie nazwy pralek
-
         }
-        System.out.println(titles);
-        System.out.println(titlesList);
-
+        System.out.println("Nazwy"+titlesList);
 
         for (Element t:titles) {
             urlList.add(t.attr("href")); //dodaje do listy wszysytkie linki pralek
@@ -44,27 +44,35 @@ public class DataProcessor {
             valuesList.add(search_soup.getElementsByAttributeValue("title", titlesList.get(i)).
                     select("span.value,span.penny").
                     text().replaceAll("\\s","").replaceAll(",","."));
-          //  values.add(search_soup.getElementsByAttributeValue("title", titlesList.get(i)).select("span.penny").text());
         }
 
-
-        System.out.println(urlList); //Tu sie wyswietlaja koncowki urli do prodouktu\
-        System.out.println(valuesList);//tu sie wyswietlaja ceny\
-
+        System.out.println("Linki"+urlList); //Tu sie wyswietlaja koncowki urli do prodouktu\
+        System.out.println("Ceny"+valuesList);//tu sie wyswietlaja ceny\
 
         for(int i=0;i<valuesList.size();i++) {
             pricesList.add(Double.parseDouble(valuesList.get(i)));
+        }
+
+        System.out.println("Jakis obiekcik "+titlesList.get(0)+" ; "+pricesList.get(0)+" ; "+urlList.get(0)); //i tu se wyswietlam jeden obiekt, nazwa, cena, url
+        return urlList.get(1);  // pierwszy element listy tylko zeby dzialalo - potem przydaloby sie wybierac po nazwie
+    }
+    public void request_product_soup() throws IOException, ParseException {
+        product_soup=ceneoAPIHandler.send_product_request("https://www.ceneo.pl"+find_best_product_ids()+";0284-0.htm");
+        Elements stars=product_soup.select("span.score-marker.score-marker--s");
+        for (Element t:stars) {
+            starList.add(Double.valueOf(t.attr("style").
+                    replaceAll("width: ","").replaceAll("%;",""))); //dodaje do listy wszysytkie gwiazdki jako numer
+                        //100 = 5 stars, 90 = 4.5 stars
+        }
+        System.out.println("gwiazdki sprzedawcow "+starList); //lista opinii dla dostawcow
+        Elements opinions=product_soup.select("span.dotted-link.js_mini-shop-info.js_no-conv");
+        for (Element t:opinions) {
+            opinionList.add(t.getElementsByAttribute("data-mini-shop-info-url").text().replace(" opinii","").replace(" opinie","").replace(" opinia",""));
 
         }
-        System.out.println(titlesList.get(1)+" ; "+pricesList.get(1)+" ; "+urlList.get(1)); //i tu se wyswietlam jeden obiekt, nazwa, cena, url
-        return urlList.get(0);  // pierwszy element listy tylko zeby dzialalo - potem przydaloby sie wybierac po nazwie
-    }
-    public void request_product_soup() throws IOException {
-        Elements sth=product_soup.select("class");
-       // product_soup=ceneoAPIHandler.send_product_request(find_best_product_ids());
-        //System.out.println(sth); //odzczytana strona dla danego produktu
+        System.out.println("Liczba opinii sprzedawcow"+opinionList);
+
 
         //tutaj trzeba odczytac dostawce
     }
-//nie ogarniam jak sie dostac do ID albo cen
 }

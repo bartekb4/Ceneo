@@ -15,7 +15,7 @@ import java.util.Locale;
 import static java.lang.Integer.parseInt;
 
 public class DataProcessor {
-    private CeneoAPIHandler ceneoAPIHandler=new CeneoAPIHandler();
+    private CeneoAPIHandler ceneoAPIHandler = null; //Tylko inicjacja, w metodach dodalem przekazanie obiektu
     private Document search_soup;
     private Document product_soup;
     private List <String> titlesList=new ArrayList<>();
@@ -26,8 +26,8 @@ public class DataProcessor {
     private List<String> opinionList=new ArrayList<>();
 
 
-    public String find_best_product_ids() throws IOException, ParseException { //tu sie dzieje scraping
-        search_soup = ceneoAPIHandler.send_search_request(ceneoAPIHandler.url);
+    public String find_best_product_ids(CeneoAPIHandler ceneoAPIHandler) throws IOException, ParseException { //tu sie dzieje scraping
+        search_soup = ceneoAPIHandler.send_search_request();
 
         Elements titles=search_soup.getElementsByClass
                 ("js_seoUrl go-to-product btn btn-primary btn-cat btn-cta js_force-conv js_clickHash");
@@ -56,8 +56,8 @@ public class DataProcessor {
         System.out.println("Jakis obiekcik "+titlesList.get(0)+" ; "+pricesList.get(0)+" ; "+urlList.get(0)); //i tu se wyswietlam jeden obiekt, nazwa, cena, url
         return urlList.get(1);  // pierwszy element listy tylko zeby dzialalo - potem przydaloby sie wybierac po nazwie
     }
-    public void request_product_soup() throws IOException, ParseException {
-        product_soup=ceneoAPIHandler.send_product_request("https://www.ceneo.pl"+find_best_product_ids()+";0284-0.htm");
+    public void request_product_soup(CeneoAPIHandler ceneoAPIHandler) throws IOException, ParseException {
+        product_soup=ceneoAPIHandler.send_product_request("https://www.ceneo.pl"+find_best_product_ids(ceneoAPIHandler)+";0284-0.htm");
         Elements stars=product_soup.select("span.score-marker.score-marker--s");
         for (Element t:stars) {
             starList.add(Double.valueOf(t.attr("style").

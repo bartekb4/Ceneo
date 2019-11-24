@@ -11,7 +11,8 @@ import java.net.URL;
 
 public class CeneoAPIHandler {
     String reponse=null;
-    String url="https://www.ceneo.pl/Smartfony;szukaj-iphone";
+//    String url="https://www.ceneo.pl/;szukaj-iphone";
+    String url=null;
     private Document HTTP_search_response=null;
     private Document HTTP_product_response=null;
 
@@ -35,12 +36,28 @@ public class CeneoAPIHandler {
 
     }
 
-    public Document send_search_request(String url) throws IOException {
+//    TODO: settery dla dodatkowych argumento -  cena, reputacja itp.
+    public void set_name(String name)
+    {
+        this.url = "https://www.ceneo.pl/;szukaj-"+name;
+    }
 
-        HTTP_search_response = Jsoup.connect(url).get();
+//    public Document send_search_request(String url) throws IOException {
+//
+//        HTTP_search_response = Jsoup.connect(url).get();
+//
+//       return HTTP_search_response;
+//    }
+
+    public Document send_search_request() throws IOException {
+
+        HTTP_search_response = Jsoup.connect(this.url).get();
 
        return HTTP_search_response;
     }
+
+
+
     public Document send_product_request(String linkhref) throws IOException { ;
         HTTP_product_response = Jsoup.connect(linkhref).get();
         return HTTP_product_response;

@@ -6,13 +6,24 @@ import java.text.ParseException;
 public class Main {
 
     public static void main(String[] args) throws IOException, ParseException {
-//        String url="https://www.ceneo.pl/;szukaj-pralka+wsad+7+kg;m1000;n1600;0112-0.htm";
+
 
         CeneoAPIHandler cc=new CeneoAPIHandler();
 
         DataProcessor dp=new DataProcessor();
+
+        Item pralka = new Item();
+
+
+        //pralka.setName("czarny rower");
+        pralka.setMin_price(0);
+        pralka.setMax_price(0);
+//        TODO ustawienie reputacji w zapytaniu
+        pralka.setMin_reputation(90);
+
+
         //System.out.println(dp.search_soup);
-        cc.set_name("test"); // nazwa przedmiotu, ktory jest wyszukiwany. TODO: Konwersja spacji na myslniki
+        cc.setItem(pralka); // przedmiot, ktory jest wyszukiwany
         cc.send_search_request();
        // dp.find_best_product_ids();
         dp.request_product_soup(cc); // przekazanie CeneoAPIHandler

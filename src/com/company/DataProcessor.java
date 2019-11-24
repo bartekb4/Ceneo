@@ -24,7 +24,8 @@ public class DataProcessor {
     private List<Double> pricesList=new ArrayList<>();
     private List<Double> starList=new ArrayList<>();
     private List<String> opinionList=new ArrayList<>();
-
+    private String value;
+    private int dotIndex;
 
     public String find_best_product_ids(CeneoAPIHandler ceneoAPIHandler) throws IOException, ParseException { //tu sie dzieje scraping
         search_soup = ceneoAPIHandler.send_search_request();
@@ -40,10 +41,19 @@ public class DataProcessor {
             urlList.add(t.attr("href")); //dodaje do listy wszysytkie linki pralek
         }
 
+
         for(int i=0;i<titlesList.size();i++) {
-            valuesList.add(search_soup.getElementsByAttributeValue("title", titlesList.get(i)).
-                    select("span.value,span.penny").
-                    text().replaceAll("\\s","").replaceAll(",","."));
+
+            value = search_soup.getElementsByAttributeValue("title", titlesList.get(i)).select("span.value,span.penny").text().replaceAll("\\s","").replaceAll(",",".");
+
+            //obejscie wspanialego Ceneo, ktore wysyla wartosci po 2 razy
+            dotIndex = value.indexOf(".");
+            if (dotIndex != -1)
+            {
+                value = value.substring(0, dotIndex+3);
+            }
+            valuesList.add(value);
+
         }
 
         System.out.println("Linki"+urlList); //Tu sie wyswietlaja koncowki urli do prodouktu\
@@ -53,9 +63,13 @@ public class DataProcessor {
             pricesList.add(Double.parseDouble(valuesList.get(i)));
         }
 
+//        TODO wyrzuca wyjatki kiedy nie znaleziono produktow
         System.out.println("Jakis obiekcik "+titlesList.get(0)+" ; "+pricesList.get(0)+" ; "+urlList.get(0)); //i tu se wyswietlam jeden obiekt, nazwa, cena, url
         return urlList.get(1);  // pierwszy element listy tylko zeby dzialalo - potem przydaloby sie wybierac po nazwie
     }
+
+
+    //        TODO wyrzuca wyjatki kiedy nie znaleziono produktow
     public void request_product_soup(CeneoAPIHandler ceneoAPIHandler) throws IOException, ParseException {
         product_soup=ceneoAPIHandler.send_product_request("https://www.ceneo.pl"+find_best_product_ids(ceneoAPIHandler)+";0284-0.htm");
         Elements stars=product_soup.select("span.score-marker.score-marker--s");

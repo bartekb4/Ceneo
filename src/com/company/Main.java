@@ -15,7 +15,7 @@ public class Main {
         Item pralka = new Item();
 
 
-        //pralka.setName("czarny rower");
+        pralka.setName("laptop macbook air");
         pralka.setMin_price(0);
         pralka.setMax_price(0);
 //        TODO ustawienie reputacji w zapytaniu
@@ -27,6 +27,8 @@ public class Main {
         cc.send_search_request();
        // dp.find_best_product_ids();
         dp.request_product_soup(cc); // przekazanie CeneoAPIHandler
+        dp.find_best_deal_for_id(cc);
+
     }
 
    }

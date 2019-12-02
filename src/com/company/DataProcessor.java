@@ -5,8 +5,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.text.Normalizer;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.*;
 
@@ -25,19 +23,29 @@ public class DataProcessor {
     private List<Double> starList=new ArrayList<>();
     private List<Double> opinionList=new ArrayList<>();
     private List<Integer> shopNumbers=new ArrayList<>();
-    private List<Integer> potentialDeals=new ArrayList<>();
+    private List<Integer> potentialPrices=new ArrayList<>();
     private List<Integer> potentialSellers=new ArrayList<>();
-
+    private ArrayList<List<Object>> endResults=new ArrayList<>();
     private String value;
     private int dotIndex;
+    Item item=new Item();
+    SearchException searchException=new SearchException();
 
     public String find_best_product_ids(CeneoAPIHandler ceneoAPIHandler) throws IOException, ParseException { //tu sie dzieje scraping
-        search_soup = ceneoAPIHandler.send_search_request();
+
+        search_soup = ceneoAPIHandler.send_search_request().get();
+
+
         Elements titles=search_soup.getElementsByClass
                 ("js_seoUrl go-to-product btn btn-primary btn-cat btn-cta js_force-conv js_clickHash"); //ta klasa oznacza ze guzik to porównaj ceny?
-        for (Element t:titles) {
-            titlesList.add(t.attr("title")); //dodaje do listy wszysytkie nazwy pralek
+        if(!titles.isEmpty()) {
+            for (Element t : titles) {
+                titlesList.add(t.attr("title")); //dodaje do listy wszysytkie nazwy pralek
+            }
         }
+        else
+            System.out.println("Empty");
+
         System.out.println("Nazwy"+titlesList);
 
         for (Element t:titles) {
@@ -84,13 +92,15 @@ public class DataProcessor {
         String linkhref =null;
         for(int i=0;i<shopNumbers.size();i++) {
             if(shopNumbers.get(i)>5){
-                potentialDeals.add(i);
+                potentialPrices.add(i);
             }
         }
 
-        linkhref=urlList.get(potentialDeals.get(0));//wybieram najtansza oferte z palca
+        linkhref=urlList.get(potentialPrices.get(0));//wybieram najtansza oferte z palca
         System.out.println(linkhref);
+
         return linkhref;
+
 
 
 
@@ -98,16 +108,18 @@ public class DataProcessor {
 
 
     //        TODO wyrzuca wyjatki kiedy nie znaleziono produktow
-    public void request_product_soup(CeneoAPIHandler ceneoAPIHandler) throws IOException, ParseException {
+    public Document request_product_soup(CeneoAPIHandler ceneoAPIHandler) throws ParseException, IOException {
 
-        product_soup=ceneoAPIHandler.send_product_request("https://www.ceneo.pl"+find_best_product_ids(ceneoAPIHandler)+";0284-0.htm");
-        //  System.out.println(product_soup);
+        product_soup= ceneoAPIHandler.send_product_request("https://www.ceneo.pl"+find_best_product_ids(ceneoAPIHandler)+";0284-0.htm").get();
+        return product_soup;
+
+    }
+    public ArrayList find_best_deal_for_id(Document product_soup){
         Elements stars=product_soup.select("span.stars.js_mini-shop-info.js_no-conv");
-
         for (Element t:stars) {
             starList.add(Double.valueOf(t.select("span.score-marker.score-marker--s").attr("style").
                     replaceAll("width: ","").replaceAll("%;",""))); //dodaje do listy wszysytkie gwiazdki jako numer
-                        //100 = 5 stars, 90 = 4.5 stars
+            //100 = 5 stars, 90 = 4.5 stars
         }
 
         System.out.println("gwiazdki sprzedawcow "+starList.size()); //lista opinii dla dostawcow
@@ -132,10 +144,10 @@ public class DataProcessor {
         System.out.println("Linki do sklepow: " + shopLinkList.size());
         System.out.println("Cenki w sklepie: "+pricesShopList);
 
-//        double minRep=80;
-        double minRep = ceneoAPIHandler.getItem().getMin_reputation(); //ustawienie minimalnej reputacji pobranej z itemu
-        double minOpin=20; //tu wpisane z palca
 
+
+        double minRep=80;
+        double minOpin=20; //tu wpisane z palca
 
         for (int i=0;i<opinionList.size();i++){    //wybieram tak na chama potencjalnych sprzedawcow i daje ich do listy
             if(starList.get(i)>minRep && opinionList.get(i)>minOpin){
@@ -144,28 +156,21 @@ public class DataProcessor {
         }
         System.out.println("seler" + potentialSellers);
 
+//Teoretycznie do przerzucenia do Klasy Output ale nie mam pomyslu jak
         System.out.println("\n \n \n \nWyniki: ");
 
         System.out.println("Dzien dobry, proponuje: \n");
 
         for(int i=0;i<3;i++) {
-            System.out.println("Produkt: "+ i );
+            System.out.println("Produkt: "+ (i+1) );
             System.out.println("\nTutaj cenka:");
-            System.out.println(pricesShopList.get(potentialSellers.get(i)));   //3 najlepsze ceny - to wszystko dziala na ID w Listach, raczej glupio, ale dziala //
+            System.out.println(pricesShopList.get(potentialSellers.get(i)));   //3 najlepsze ceny - to wszystko dziala na ID w Listach, raczej glupio, ale dziala
             System.out.println("Tutaj link: ");
             System.out.println("http://www.ceneo.pl"+shopLinkList.get(potentialSellers.get(i))+"\n");  //linki
         }
-
-
-    }
-    public void find_best_deal_for_id(CeneoAPIHandler ceneoAPIHandler){
-
-
-
-
-
-
-
-
+        endResults.add(Collections.singletonList(pricesShopList));
+        endResults.add(Collections.singletonList(potentialSellers));
+        endResults.add(Collections.singletonList(shopLinkList));
+        return endResults;
     }
 }

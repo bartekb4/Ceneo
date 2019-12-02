@@ -18,28 +18,18 @@ public class Main {
         Item pralka = new Item();
 
 
-        pralka.setName("laptop");
+        pralka.setName("");
         pralka.setMin_price(0);
         pralka.setMax_price(0);
 //        TODO ustawienie reputacji w zapytaniu
         pralka.setMin_reputation(90);
-
-
-        //System.out.println(dp.search_soup);
-        cc.setItem(pralka); // przedmiot, ktory jest wyszukiwany
-        try {
-            cc.send_search_request();
-        } catch (HttpStatusException e) {
-            searchException.userError("Co robisz bandyto","Halko");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        cc.setItem(pralka);
 
 
         try {
             dp.find_best_deal_for_id(dp.request_product_soup(cc));
         } catch (HttpStatusException e) {
-            searchException.userError("Cos sie zepsulo w linku, próbuj dalej","Halko");
+            searchException.userError("Co robisz bandyto","Halko");
         } catch (IOException e) {
             e.printStackTrace();
         }

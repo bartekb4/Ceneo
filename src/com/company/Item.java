@@ -8,7 +8,7 @@ public class Item {
     private String url = "https://www.ceneo.pl/";
     private double min_price = 0;
     private double max_price = 0;
-    private double min_reputation = 404;
+    private double min_reputation = 90;
     private int quanity = 1;
     //na stronie ceneo nie znalazlem czasu a nie wiem jak wziac z naglowka http, wiec jest z systemu
     private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -59,7 +59,7 @@ public class Item {
         else
         {
 //          TODO komunikat o bledzie jestli nie ma nazwy
-            this.url = this.url + ";szukaj-decide";
+            this.url = this.url + ";";
         }
 
 
@@ -72,9 +72,9 @@ public class Item {
         {
             this.url = this.url + ";n" + max_price;
         }
-        //sortowanie po najnizszej cenie ???
+        //sortowanie po najnizszej cenie
         return this.url + ";0112-0";
-    }
+        }
 
 
 

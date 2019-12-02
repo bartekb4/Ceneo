@@ -30,7 +30,6 @@ public class DataProcessor {
 
     private String value;
     private int dotIndex;
-    Item item=new Item();
 
     public String find_best_product_ids(CeneoAPIHandler ceneoAPIHandler) throws IOException, ParseException { //tu sie dzieje scraping
         search_soup = ceneoAPIHandler.send_search_request();
@@ -133,7 +132,8 @@ public class DataProcessor {
         System.out.println("Linki do sklepow: " + shopLinkList.size());
         System.out.println("Cenki w sklepie: "+pricesShopList);
 
-        double minRep=80;
+//        double minRep=80;
+        double minRep = ceneoAPIHandler.getItem().getMin_reputation(); //ustawienie minimalnej reputacji pobranej z itemu
         double minOpin=20; //tu wpisane z palca
 
 
@@ -151,7 +151,7 @@ public class DataProcessor {
         for(int i=0;i<3;i++) {
             System.out.println("Produkt: "+ i );
             System.out.println("\nTutaj cenka:");
-            System.out.println(pricesShopList.get(potentialSellers.get(i)));   //3 najlepsze ceny - to wszystko dziala na ID w Listach, raczej glupio, ale dziala
+            System.out.println(pricesShopList.get(potentialSellers.get(i)));   //3 najlepsze ceny - to wszystko dziala na ID w Listach, raczej glupio, ale dziala //
             System.out.println("Tutaj link: ");
             System.out.println("http://www.ceneo.pl"+shopLinkList.get(potentialSellers.get(i))+"\n");  //linki
         }

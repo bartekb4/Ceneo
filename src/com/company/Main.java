@@ -18,17 +18,17 @@ public class Main {
         pralka.setName("laptop macbook air");
         pralka.setMin_price(0);
         pralka.setMax_price(0);
-//        TODO ustawienie reputacji w zapytaniu
         pralka.setMin_reputation(90);
 
 
         //System.out.println(dp.search_soup);
-        cc.setItem(pralka); // przedmiot, ktory jest wyszukiwany
+        cc.setItem(pralka); // przedmiot, ktory jest wyszukiwany - ustawienie dopiero po nadaniu wszystkich opcji wyszukiwania
         cc.send_search_request();
        // dp.find_best_product_ids();
         dp.request_product_soup(cc); // przekazanie CeneoAPIHandler
         dp.find_best_deal_for_id(cc);
 
+        System.out.println(pralka.getUrl());
     }
 
    }

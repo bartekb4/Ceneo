@@ -12,6 +12,7 @@ import java.net.URL;
 public class CeneoAPIHandler {
     String reponse=null;
     String url=null;
+    Item item = null;
     private Document HTTP_search_response=null;
     private Document HTTP_product_response=null;
 
@@ -37,7 +38,12 @@ public class CeneoAPIHandler {
 
     public void setItem(Item Item)
     {
+        this.item = Item;
         this.url = Item.getUrl();
+    }
+
+    public Item getItem (){
+        return this.item;
     }
 
 

@@ -1,21 +1,24 @@
 package com.company;
 
+import org.jsoup.HttpStatusException;
+
 import java.io.IOException;
 import java.text.ParseException;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException, ParseException {
+    public static void main(String[] args) throws  ParseException {
 
+        SearchException searchException = new SearchException();
 
-        CeneoAPIHandler cc=new CeneoAPIHandler();
+        CeneoAPIHandler cc = new CeneoAPIHandler();
 
-        DataProcessor dp=new DataProcessor();
+        DataProcessor dp = new DataProcessor();
 
         Item pralka = new Item();
 
 
-        pralka.setName("laptop macbook air");
+        pralka.setName("laptop");
         pralka.setMin_price(0);
         pralka.setMax_price(0);
 //        TODO ustawienie reputacji w zapytaniu
@@ -24,11 +27,40 @@ public class Main {
 
         //System.out.println(dp.search_soup);
         cc.setItem(pralka); // przedmiot, ktory jest wyszukiwany
-        cc.send_search_request();
-       // dp.find_best_product_ids();
-        dp.request_product_soup(cc); // przekazanie CeneoAPIHandler
-        dp.find_best_deal_for_id(cc);
+        try {
+            cc.send_search_request();
+        } catch (HttpStatusException e) {
+            searchException.userError("Co robisz bandyto","Halko");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            dp.find_best_deal_for_id(dp.request_product_soup(cc));
+        } catch (HttpStatusException e) {
+            searchException.userError("Cos sie zepsulo w linku, próbuj dalej","Halko");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+/*        try {
+
+            Throwable throwable = new Throwable("ERROR");
+            searchException = new SearchException("Empty Search", throwable);
+            searchException.emptyResponse(cc.send_search_request());
+        } catch (SearchException e) {
+           e.userError("Co ty robisz", "Halko");
+        }
+        // dp.find_best_product_ids();
+        try {
+            dp.find_best_deal_for_id(dp.request_product_soup(cc)); // przekazanie CeneoAPIHandler
+        } catch (IOException e) {
+            System.err.println("No resp");
+        } catch (ParseException e) {
+            System.err.println("No resp");
+        }
+    }*/
 
     }
-
-   }
+}

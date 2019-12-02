@@ -83,7 +83,7 @@ public class Item {
     }
 
     public double getMin_reputation() {
-        return min_reputation;
+        return this.min_reputation;
     }
 
     public void setUrl(String url) {

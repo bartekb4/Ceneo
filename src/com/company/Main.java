@@ -18,16 +18,15 @@ public class Main {
         Item pralka = new Item();
 
 
-        pralka.setName("");
+        pralka.setName("laptop");
         pralka.setMin_price(0);
         pralka.setMax_price(0);
-//        TODO ustawienie reputacji w zapytaniu
         pralka.setMin_reputation(90);
         cc.setItem(pralka);
 
 
         try {
-            dp.find_best_deal_for_id(dp.request_product_soup(cc));
+            dp.find_best_deal_for_id(dp.request_product_soup(cc),cc.getItem().getMin_reputation()); //Troche spaghetti z tym min rep, ale na razie dziala
         } catch (HttpStatusException e) {
             searchException.userError("Co robisz bandyto","Halko");
         } catch (IOException e) {

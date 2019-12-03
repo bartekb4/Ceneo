@@ -30,7 +30,7 @@ public class DataProcessor {
     private List<String> delieveryCosts=new ArrayList<String>();
     private String value;
     private int dotIndex;
-    Item item=new Item();
+//    Item item=new Item();  //przekazywane w CeneoApiHandler
     SearchException searchException=new SearchException();
 
     public String find_best_product_ids(CeneoAPIHandler ceneoAPIHandler) throws IOException, ParseException { //tu sie dzieje scraping
@@ -118,7 +118,8 @@ public class DataProcessor {
         return product_soup;
 
     }
-    public ArrayList find_best_deal_for_id(Document product_soup){
+
+    public ArrayList find_best_deal_for_id(Document product_soup, double minRep){
         Elements stars=product_soup.select("span.stars.js_mini-shop-info.js_no-conv");
         System.out.println(product_soup);
         for (Element t:stars) {
@@ -158,7 +159,6 @@ public class DataProcessor {
         System.out.println("Dostawa: "+delieveryCosts);
 
 
-        double minRep=80;
         double minOpin=20; //tu wpisane z palca
 
         for (int i=0;i<opinionList.size();i++){    //wybieram tak na chama potencjalnych sprzedawcow i daje ich do listy

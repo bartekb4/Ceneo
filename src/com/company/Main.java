@@ -18,16 +18,19 @@ public class Main {
         Item pralka = new Item();
 
 
-        pralka.setName("red dead redemption 2");
+
+
+
+        pralka.setName("laptop");
+ //0565cee8d226e513c73abc146619121e71dc116c
         pralka.setMin_price(0);
         pralka.setMax_price(0);
-//        TODO ustawienie reputacji w zapytaniu
         pralka.setMin_reputation(90);
         cc.setItem(pralka);
 
 
         try {
-            dp.find_best_deal_for_id(dp.request_product_soup(cc));
+            dp.find_best_deal_for_id(dp.request_product_soup(cc),cc.getItem().getMin_reputation()); //Troche spaghetti z tym min rep, ale na razie dziala
         } catch (HttpStatusException e) {
             searchException.userError("Co robisz bandyto","Halko");
         } catch (IOException e) {

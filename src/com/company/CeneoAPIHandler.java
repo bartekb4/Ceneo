@@ -19,6 +19,7 @@ public class CeneoAPIHandler {
     private org.jsoup.HttpStatusException httpStatusException=null;
     private int searchStatus=0;
     private int productStatus=0;
+    private Item item = null;
 
     public Connection getHTTP_product_response() {
         return HTTP_product_response;
@@ -64,9 +65,15 @@ public class CeneoAPIHandler {
 
     }
 
-    public void setItem(Item Item)
+    public void setItem(Item item)
     {
-        this.url = Item.getUrl();
+        this.item = item;
+        this.url = item.getUrl();
+    }
+
+    public Item getItem()
+    {
+        return this.item;
     }
 
 

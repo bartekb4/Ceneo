@@ -32,7 +32,7 @@ public class Main {
 
 
         try {
-            dp.comparison(dp.find_best_deal_for_id(dp.request_product_soup(cc),cc.getItem().getMin_reputation()),dp2.find_best_deal_for_id(dp2.request_product_soup(cc1),cc1.getItem().getMin_reputation()));
+            dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation()),dp2.request_product_soup(cc1,cc1.getItem().getMin_reputation()));
             //dp2.find_best_deal_for_id(dp2.request_product_soup(cc1),cc1.getItem().getMin_reputation());//Troche spaghetti z tym min rep, ale na razie dziala
         } catch (HttpStatusException e) {
             searchException.userError("Co robisz bandyto","Halko");

@@ -14,45 +14,47 @@ public class DataProcessor {
     private CeneoAPIHandler ceneoAPIHandler = null; //Tylko inicjacja, w metodach dodalem przekazanie obiektu
     private Document search_soup;
     private Document product_soup;
-    private List <String> titlesList=new ArrayList<>();
-    private List<String> valuesList=new ArrayList<String>();
-    private List<Double> pricesList=new ArrayList<>();
-    private List <String> urlList=new ArrayList<>();
-    private List <String> shopLinkList=new ArrayList<>();
-    private List<String> pricesShopList=new ArrayList<>();
-    private List<Double> starList=new ArrayList<>();
-    private List<Double> opinionList=new ArrayList<>();
-    private List<Integer> shopNumbers=new ArrayList<>();
-    private List<String> delieveryCostsMod=new ArrayList<>();
-    private List<Integer> potentialPrices=new ArrayList<>();
-    private List<Integer> potentialSellers=new ArrayList<>();
-    private ArrayList<List<Object>> endResults=new ArrayList<>();
-    private List<String> shopNames=new ArrayList<>();
-    private List<String> delieveryCosts=new ArrayList<String>();
-    private List <String> priceWithDeliv=new ArrayList<>();
+    private List<String> titlesList = new ArrayList<>();
+    private List<String> valuesList = new ArrayList<String>();
+    private List<Double> pricesList = new ArrayList<>();
+    private List<String> urlList = new ArrayList<>();
+    private List<String> shopLinkList = new ArrayList<>();
+    private List<String> pricesShopList = new ArrayList<>();
+    private List<Double> pricesShopList2 = new ArrayList<>();
+    private List<Double> starList = new ArrayList<>();
+    private List<Double> opinionList = new ArrayList<>();
+    private List<Double> priceWithDelivMod2 = new ArrayList<>();
+    private List<Integer> shopNumbers = new ArrayList<>();
+    private List<String> delieveryCostsMod = new ArrayList<>();
+    private List<Integer> potentialPrices = new ArrayList<>();
+    private List<Integer> potentialSellers = new ArrayList<>();
+    private ArrayList<List<Object>> endResults = new ArrayList<>();
+    private List<String> shopNames = new ArrayList<>();
+    private List<String> delieveryCosts = new ArrayList<String>();
+    private List<String> priceWithDeliv = new ArrayList<>();
+    private List<Double> priceWithDelivMod = new ArrayList<>();
+
     private String value;
     private int dotIndex;
-//    Item item=new Item();  //przekazywane w CeneoApiHandler
-    SearchException searchException=new SearchException();
+    //    Item item=new Item();  //przekazywane w CeneoApiHandler
+    SearchException searchException = new SearchException();
 
     public String find_best_product_ids(CeneoAPIHandler ceneoAPIHandler) throws IOException, ParseException { //tu sie dzieje scraping
 
         search_soup = ceneoAPIHandler.send_search_request().get();
 
-
-        Elements titles=search_soup.getElementsByClass
+        Elements titles = search_soup.getElementsByClass
                 ("js_seoUrl go-to-product btn btn-primary btn-cat btn-cta js_force-conv js_clickHash"); //ta klasa oznacza ze guzik to porównaj ceny?
-        if(!titles.isEmpty()) {
+        if (!titles.isEmpty()) {
             for (Element t : titles) {
                 titlesList.add(t.attr("title")); //dodaje do listy wszysytkie nazwy pralek
             }
-        }
-        else
+        } else
             System.out.println("Empty");
 
-        System.out.println("Nazwy"+titlesList);
+        //System.out.println("Nazwy"+titlesList);
 
-        for (Element t:titles) {
+        for (Element t : titles) {
             urlList.add(t.attr("href")); //dodaje do listy wszysytkie linki pralek
         }
 /*
@@ -79,49 +81,41 @@ public class DataProcessor {
         }
 
  */
-        System.out.println("Linki"+urlList); //Tu sie wyswietlaja koncowki urli do prodouktu\
+        // System.out.println("Linki"+urlList); //Tu sie wyswietlaja koncowki urli do prodouktu\
         Elements shopNumber = search_soup.select("span.shop-numb");
-        for (Element t:shopNumber) {
-            shopNumbers.add(Integer.valueOf(String.valueOf(t).replaceAll("<span class=\"shop-numb\"></span>","0").
-                    replaceAll("<span class=\"shop-numb\">","").replaceAll("</span>","").
-                    replaceAll("w ","").replaceAll(" sklepach","").replaceAll(" sklepie","")));
+        for (Element t : shopNumber) {
+            shopNumbers.add(Integer.valueOf(String.valueOf(t).replaceAll("<span class=\"shop-numb\"></span>", "0").
+                    replaceAll("<span class=\"shop-numb\">", "").replaceAll("</span>", "").
+                    replaceAll("w ", "").replaceAll(" sklepach", "").replaceAll(" sklepie", "")));
             shopNumbers.removeAll(Collections.singleton(0));
         }
-        System.out.println("Sklepy " + shopNumbers);  //Liczba dostepnych sklepow dla danej oferty
+        //System.out.println("Sklepy " + shopNumbers);  //Liczba dostepnych sklepow dla danej oferty
 
-        int mostShops=Collections.max(shopNumbers);
-        System.out.println(shopNumbers.indexOf(mostShops));
-
+        int mostShops = Collections.max(shopNumbers);
+        //System.out.println(shopNumbers.indexOf(mostShops));
 
 //        TODO wyrzuca wyjatki kiedy nie znaleziono produktow
 
-        String linkhref =null;
+        String linkhref = null;
+        /*
         for(int i=0;i<shopNumbers.size();i++) {
             if(shopNumbers.get(i)>5){
                 potentialPrices.add(i);
             }
         }
-
-        linkhref=urlList.get(shopNumbers.indexOf(mostShops));//wybieram najtansza oferte z palca
+*/
+        linkhref = urlList.get(shopNumbers.indexOf(mostShops));//wybieram oferte z najwieksza liczba sklepow
         System.out.println(linkhref);
 
         return linkhref;
-
-
-
-
     }
 
 
     //        TODO wyrzuca wyjatki kiedy nie znaleziono produktow
-    public Document request_product_soup(CeneoAPIHandler ceneoAPIHandler) throws ParseException, IOException {
+    public ArrayList<List<Object>> request_product_soup(CeneoAPIHandler ceneoAPIHandler, double minRep) throws ParseException, IOException {
 
-        product_soup= ceneoAPIHandler.send_product_request("https://www.ceneo.pl"+find_best_product_ids(ceneoAPIHandler)+";0284-0.htm").get();
-        return product_soup;
-
-    }
-
-    public List<String> find_best_deal_for_id(Document product_soup, double minRep) {
+        product_soup = ceneoAPIHandler.send_product_request("https://www.ceneo.pl" + find_best_product_ids(ceneoAPIHandler) + ";0284-0.htm").get();
+        //return product_soup;
         Elements stars = product_soup.select("span.stars.js_mini-shop-info.js_no-conv");
         for (Element t : stars) {
             starList.add(Double.valueOf(t.select("span.score-marker.score-marker--s").attr("style").
@@ -129,11 +123,10 @@ public class DataProcessor {
             //100 = 5 stars, 90 = 4.5 stars
         }
 
-        System.out.println("gwiazdki sprzedawcow " + starList.size()); //lista opinii dla dostawcow
+        System.out.println("gwiazdki sprzedawcow " + starList); //lista opinii dla dostawcow
         Elements opinions = product_soup.select("span.dotted-link.js_mini-shop-info.js_no-conv");
         for (Element t : opinions) {
             opinionList.add(Double.valueOf(t.getElementsByAttribute("data-mini-shop-info-url").text().replace(" opinii", "").replace(" opinie", "").replace(" opinia", "")));
-
         }
 
         System.out.println("Liczba opinii sprzedawcow" + opinionList);
@@ -150,70 +143,85 @@ public class DataProcessor {
             //delieveryCosts.add(t.select("td.cell-price").attr("data-offset-x"));
         }
 
-        Elements deliveryCost = product_soup.select("td.cell-price");
+        Elements deliveryCost = product_soup.select("td.cell-price"); //koszty dostawy=z wysylka X albo darmowa wysylka
         for (Element t : deliveryCost) {
             delieveryCosts.add((t.getElementsByClass("product-delivery-info js_deliveryInfo").text().toString()));
         }
-        System.out.println("Linki do sklepow: " + shopLinkList.size());
+        //System.out.println("Linki do sklepow: " + shopLinkList.size());
         System.out.println("Cenki w sklepie: " + pricesShopList);
         System.out.println("Nazwy sklepow: " + shopNames);
         System.out.println("Dostawa: " + delieveryCosts);
 
         double minOpin = 20; //tu wpisane z palca
-        /*
+
         for (int i = 0; i < opinionList.size(); i++) {    //wybieram tak na chama potencjalnych sprzedawcow i daje ich do listy
             if (starList.get(i) > minRep && opinionList.get(i) > minOpin) {
-                potentialSellers.add(i);
+                shopNames.remove(i);
+                pricesShopList.remove(i);
+                delieveryCosts.remove(i);                       //przycinam listy sklepow,cen i kosztow z dostawy zeby dzialac tylko na tych co nas interesuja
             }
         }
+        System.out.println("Cenki w sklepie: " + pricesShopList);
+        System.out.println("Nazwy sklepow: " + shopNames);
+        System.out.println("Dostawa: " + delieveryCosts);
 
-        */
-        System.out.println("seler" + potentialSellers);
-        for(int i=0;i<delieveryCosts.size();i++) {
+        //System.out.println("seler" + potentialSellers);
+        for (int i = 0; i < delieveryCosts.size(); i++) {
 
-            if(delieveryCosts.get(i).matches("Darmowa wysyłka")){
+            if (delieveryCosts.get(i).matches("Darmowa wysyłka")) {
                 priceWithDeliv.add(i, pricesShopList.get(i));
-            }
-            else{
+            } else {                                                    //lacze w jedna liste ofery z kosztem wysylki i z darmowa
                 priceWithDeliv.add(i, delieveryCosts.get(i));
             }
+            //tu jest jazda xd  #don't judge me
+            //ta lista jest pomocnicza do przekonwertowania na liczby tesktu z wysylka x zl
+            priceWithDelivMod.add(Double.valueOf(priceWithDeliv.get(i).replaceAll("Z wysyłką od ", "").replaceAll(" zł", "").replaceAll(",",".")));
+            //ta jest do przekonwertowania wszystkich cen na double
+            pricesShopList2.add(Double.valueOf(pricesShopList.get(i)));
+            //a tutaj wyliczam koszt wysylki odejmujac koszt przedmiotu z wysylka i koszt wysylki
+            priceWithDelivMod2.add(i, Double.valueOf(Math.round(priceWithDelivMod.get(i)-pricesShopList2.get(i))));
         }
+        //ceny w liczbach
+        System.out.println("Koszty dostawy  " + priceWithDelivMod2);
 
-        System.out.println("DW COST "+priceWithDeliv);
+        endResults.add(Collections.singletonList(shopNames));
+        endResults.add(Collections.singletonList(priceWithDelivMod2));   //Do tej listy list xd jest dodane nazwy sklepow, koszt bez dostawy,
+        endResults.add(Collections.singletonList(pricesShopList2));       //i koszt dostawy, to wszystko jest po to zeby sie dalo to jakos przekazac
+        System.out.println(endResults);                                  //do nastepnej funkcji, i w niej porownywac dla kilku obiektow szukanych
+
+
+
 //Teoretycznie do przerzucenia do Klasy Output ale nie mam pomyslu jak
         System.out.println("\n \n \n \nWyniki: ");
 
         System.out.println("Dzien dobry, proponuje: \n");
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 2; i++) {
             System.out.println("Produkt: " + (i + 1));
             System.out.println("\nTutaj cenka:");
-            System.out.println(delieveryCosts.get(i));   //3 najlepsze ceny - to wszystko dziala na ID w Listach, raczej glupio, ale dziala
+            System.out.println(priceWithDelivMod.get(i));   //3 najlepsze ceny - to wszystko dziala na ID w Listach, raczej glupio, ale dziala
             System.out.println("Tutaj link: ");
             System.out.println("http://www.ceneo.pl" + shopLinkList.get(i) + "\n");  //linki
         }
-        /*endResults.add(Collections.singletonList(pricesShopList));
-        endResults.add(Collections.singletonList(potentialSellers));
-        endResults.add(Collections.singletonList(shopLinkList));
-        */
 
-
-
-
-        return shopNames;
-
-
+        return endResults;
 
     }
-        public void comparison(List<String> shopNames1,List<String> shopNames2){
-            List<String> equalShops=new ArrayList<>();
-            for(int i=0;i<shopNames1.size();i++){
-                if(!shopNames1.get(i).equals(shopNames2.get(i))){
-                    equalShops.add(i,shopNames1.get(i));
-                }
 
+    public List<String> find_best_deal_for_id(ArrayList<List<Object>> endResults1, ArrayList<List<Object>> endResults2) {
+        List<String> equalShops = new ArrayList<>();
+        List<String> lowestPrices = new ArrayList<>();
+
+        //TODO:Warunki zeby iterowalo po krotszej
+        for (int i = 0; i < endResults1.size()/2; i++) {
+            if (!endResults1.get(i).equals(endResults2.get(i))) {
+                equalShops.add(i, String.valueOf(endResults1.get(i)));   //tu sprwadzam sklepu powtarzajace sie w listach
             }
-            System.out.println("Powtarzające sie sklepy "+equalShops);
         }
+        System.out.println("Powtarzające sie sklepy " + equalShops);
+        System.out.println("Powtarzające sie sklepy " + lowestPrices);
+        return equalShops;
+        //no i teraz jest grubo, na moje oko, trzeba teraz wrocic do tych sklepow ktore sie powtarzaja w obu listach, i zobaczyc ich koszt wysylki
+        //no i cene oferty
     }
-
+}

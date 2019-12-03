@@ -18,7 +18,7 @@ public class Main {
         Item pralka = new Item();
 
 
-        pralka.setName("");
+        pralka.setName("red dead redemption 2");
         pralka.setMin_price(0);
         pralka.setMax_price(0);
 //        TODO ustawienie reputacji w zapytaniu

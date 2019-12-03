@@ -26,21 +26,7 @@ public class SearchException extends RuntimeException {
     public SearchException(Throwable throwable) {
     }
 
-    public void emptyDocument(org.jsoup.nodes.Document document){
 
-        this.document=document;
-        this.throwable=new Throwable("Error, no response");
-        if(document.text()==null){
-            throw new SearchException(throwable);
-        }
-    }
-    public void badStatus(Connection connection) throws IOException {
-        this.connection=connection;
-        if (connection.response().statusCode()!=200) {
-            throw new SearchException(throwable);
-        }
-
-    }
     public void userError(String wiadomosc, String tytul){
         JOptionPane.showMessageDialog(null, wiadomosc, tytul, JOptionPane.INFORMATION_MESSAGE);
     }

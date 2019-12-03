@@ -26,6 +26,8 @@ public class DataProcessor {
     private List<Integer> potentialPrices=new ArrayList<>();
     private List<Integer> potentialSellers=new ArrayList<>();
     private ArrayList<List<Object>> endResults=new ArrayList<>();
+    private List<String> shopNames=new ArrayList<>();
+    private List<String> delieveryCosts=new ArrayList<String>();
     private String value;
     private int dotIndex;
     Item item=new Item();
@@ -84,7 +86,9 @@ public class DataProcessor {
             shopNumbers.removeAll(Collections.singleton(0));
         }
         System.out.println("Sklepy " + shopNumbers);  //Liczba dostepnych sklepow dla danej oferty
-        System.out.println(shopNumbers);
+
+        int mostShops=Collections.max(shopNumbers);
+        System.out.println(shopNumbers.indexOf(mostShops));
 
 
 //        TODO wyrzuca wyjatki kiedy nie znaleziono produktow
@@ -96,7 +100,7 @@ public class DataProcessor {
             }
         }
 
-        linkhref=urlList.get(potentialPrices.get(0));//wybieram najtansza oferte z palca
+        linkhref=urlList.get(shopNumbers.indexOf(mostShops));//wybieram najtansza oferte z palca
         System.out.println(linkhref);
 
         return linkhref;
@@ -116,6 +120,7 @@ public class DataProcessor {
     }
     public ArrayList find_best_deal_for_id(Document product_soup){
         Elements stars=product_soup.select("span.stars.js_mini-shop-info.js_no-conv");
+        System.out.println(product_soup);
         for (Element t:stars) {
             starList.add(Double.valueOf(t.select("span.score-marker.score-marker--s").attr("style").
                     replaceAll("width: ","").replaceAll("%;",""))); //dodaje do listy wszysytkie gwiazdki jako numer
@@ -139,11 +144,18 @@ public class DataProcessor {
         Elements shoplink=product_soup.select("tr.product-offer.clickable-offer.js_offer-container-click.js_product-offer"); //linki do konkretnej oferty
         for (Element t:shoplink) {
             shopLinkList.add(t.attr("data-click-url"));
+            shopNames.add(t.attr("data-shopurl"));
+            //delieveryCosts.add(t.select("td.cell-price").attr("data-offset-x"));
         }
 
+        Elements deliveryCost=product_soup.select("td.cell-price");
+        for (Element t:deliveryCost) {
+            delieveryCosts.add(t.getElementsByClass("product-delivery-info js_deliveryInfo").text());
+        }
         System.out.println("Linki do sklepow: " + shopLinkList.size());
         System.out.println("Cenki w sklepie: "+pricesShopList);
-
+        System.out.println("Nazwy sklepow: "+shopNames);
+        System.out.println("Dostawa: "+delieveryCosts);
 
 
         double minRep=80;
@@ -155,6 +167,12 @@ public class DataProcessor {
             }
         }
         System.out.println("seler" + potentialSellers);
+
+
+
+
+
+
 
 //Teoretycznie do przerzucenia do Klasy Output ale nie mam pomyslu jak
         System.out.println("\n \n \n \nWyniki: ");

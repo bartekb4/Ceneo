@@ -19,15 +19,17 @@ public class DataProcessor {
     private List<Double> pricesList=new ArrayList<>();
     private List <String> urlList=new ArrayList<>();
     private List <String> shopLinkList=new ArrayList<>();
-    private List<Double> pricesShopList=new ArrayList<>();
+    private List<String> pricesShopList=new ArrayList<>();
     private List<Double> starList=new ArrayList<>();
     private List<Double> opinionList=new ArrayList<>();
     private List<Integer> shopNumbers=new ArrayList<>();
+    private List<String> delieveryCostsMod=new ArrayList<>();
     private List<Integer> potentialPrices=new ArrayList<>();
     private List<Integer> potentialSellers=new ArrayList<>();
     private ArrayList<List<Object>> endResults=new ArrayList<>();
     private List<String> shopNames=new ArrayList<>();
     private List<String> delieveryCosts=new ArrayList<String>();
+    private List <String> priceWithDeliv=new ArrayList<>();
     private String value;
     private int dotIndex;
 //    Item item=new Item();  //przekazywane w CeneoApiHandler
@@ -119,76 +121,99 @@ public class DataProcessor {
 
     }
 
-    public ArrayList find_best_deal_for_id(Document product_soup, double minRep){
-        Elements stars=product_soup.select("span.stars.js_mini-shop-info.js_no-conv");
-        System.out.println(product_soup);
-        for (Element t:stars) {
+    public List<String> find_best_deal_for_id(Document product_soup, double minRep) {
+        Elements stars = product_soup.select("span.stars.js_mini-shop-info.js_no-conv");
+        for (Element t : stars) {
             starList.add(Double.valueOf(t.select("span.score-marker.score-marker--s").attr("style").
-                    replaceAll("width: ","").replaceAll("%;",""))); //dodaje do listy wszysytkie gwiazdki jako numer
+                    replaceAll("width: ", "").replaceAll("%;", ""))); //dodaje do listy wszysytkie gwiazdki jako numer
             //100 = 5 stars, 90 = 4.5 stars
         }
 
-        System.out.println("gwiazdki sprzedawcow "+starList.size()); //lista opinii dla dostawcow
-        Elements opinions=product_soup.select("span.dotted-link.js_mini-shop-info.js_no-conv");
-        for (Element t:opinions) {
-            opinionList.add(Double.valueOf(t.getElementsByAttribute("data-mini-shop-info-url").text().replace(" opinii","").replace(" opinie","").replace(" opinia","")));
+        System.out.println("gwiazdki sprzedawcow " + starList.size()); //lista opinii dla dostawcow
+        Elements opinions = product_soup.select("span.dotted-link.js_mini-shop-info.js_no-conv");
+        for (Element t : opinions) {
+            opinionList.add(Double.valueOf(t.getElementsByAttribute("data-mini-shop-info-url").text().replace(" opinii", "").replace(" opinie", "").replace(" opinia", "")));
 
         }
 
-        System.out.println("Liczba opinii sprzedawcow"+opinionList);
+        System.out.println("Liczba opinii sprzedawcow" + opinionList);
 
         Elements prices = product_soup.select("a.product-price.go-to-shop"); //wszystkie ceny dla danego produktu
-        for (Element t:prices) {
-            pricesShopList.add(Double.valueOf(t.select("span.value,span.penny").text().replaceAll("\\s","").replaceAll(",",".")));
+        for (Element t : prices) {
+            pricesShopList.add((t.select("span.value,span.penny").text().replaceAll("\\s", "").replaceAll(",", ".")));
         }
 
-        Elements shoplink=product_soup.select("tr.product-offer.clickable-offer.js_offer-container-click.js_product-offer"); //linki do konkretnej oferty
-        for (Element t:shoplink) {
+        Elements shoplink = product_soup.select("tr.product-offer.clickable-offer.js_offer-container-click.js_product-offer"); //linki do konkretnej oferty
+        for (Element t : shoplink) {
             shopLinkList.add(t.attr("data-click-url"));
             shopNames.add(t.attr("data-shopurl"));
             //delieveryCosts.add(t.select("td.cell-price").attr("data-offset-x"));
         }
 
-        Elements deliveryCost=product_soup.select("td.cell-price");
-        for (Element t:deliveryCost) {
-            delieveryCosts.add(t.getElementsByClass("product-delivery-info js_deliveryInfo").text());
+        Elements deliveryCost = product_soup.select("td.cell-price");
+        for (Element t : deliveryCost) {
+            delieveryCosts.add((t.getElementsByClass("product-delivery-info js_deliveryInfo").text().toString()));
         }
         System.out.println("Linki do sklepow: " + shopLinkList.size());
-        System.out.println("Cenki w sklepie: "+pricesShopList);
-        System.out.println("Nazwy sklepow: "+shopNames);
-        System.out.println("Dostawa: "+delieveryCosts);
+        System.out.println("Cenki w sklepie: " + pricesShopList);
+        System.out.println("Nazwy sklepow: " + shopNames);
+        System.out.println("Dostawa: " + delieveryCosts);
 
-
-        double minOpin=20; //tu wpisane z palca
-
-        for (int i=0;i<opinionList.size();i++){    //wybieram tak na chama potencjalnych sprzedawcow i daje ich do listy
-            if(starList.get(i)>minRep && opinionList.get(i)>minOpin){
+        double minOpin = 20; //tu wpisane z palca
+        /*
+        for (int i = 0; i < opinionList.size(); i++) {    //wybieram tak na chama potencjalnych sprzedawcow i daje ich do listy
+            if (starList.get(i) > minRep && opinionList.get(i) > minOpin) {
                 potentialSellers.add(i);
             }
         }
+
+        */
         System.out.println("seler" + potentialSellers);
+        for(int i=0;i<delieveryCosts.size();i++) {
 
+            if(delieveryCosts.get(i).matches("Darmowa wysyłka")){
+                priceWithDeliv.add(i, pricesShopList.get(i));
+            }
+            else{
+                priceWithDeliv.add(i, delieveryCosts.get(i));
+            }
+        }
 
-
-
-
-
-
+        System.out.println("DW COST "+priceWithDeliv);
 //Teoretycznie do przerzucenia do Klasy Output ale nie mam pomyslu jak
         System.out.println("\n \n \n \nWyniki: ");
 
         System.out.println("Dzien dobry, proponuje: \n");
 
-        for(int i=0;i<3;i++) {
-            System.out.println("Produkt: "+ (i+1) );
+        for (int i = 0; i < 3; i++) {
+            System.out.println("Produkt: " + (i + 1));
             System.out.println("\nTutaj cenka:");
-            System.out.println(pricesShopList.get(potentialSellers.get(i)));   //3 najlepsze ceny - to wszystko dziala na ID w Listach, raczej glupio, ale dziala
+            System.out.println(delieveryCosts.get(i));   //3 najlepsze ceny - to wszystko dziala na ID w Listach, raczej glupio, ale dziala
             System.out.println("Tutaj link: ");
-            System.out.println("http://www.ceneo.pl"+shopLinkList.get(potentialSellers.get(i))+"\n");  //linki
+            System.out.println("http://www.ceneo.pl" + shopLinkList.get(i) + "\n");  //linki
         }
-        endResults.add(Collections.singletonList(pricesShopList));
+        /*endResults.add(Collections.singletonList(pricesShopList));
         endResults.add(Collections.singletonList(potentialSellers));
         endResults.add(Collections.singletonList(shopLinkList));
-        return endResults;
+        */
+
+
+
+
+        return shopNames;
+
+
+
     }
-}
+        public void comparison(List<String> shopNames1,List<String> shopNames2){
+            List<String> equalShops=new ArrayList<>();
+            for(int i=0;i<shopNames1.size();i++){
+                if(!shopNames1.get(i).equals(shopNames2.get(i))){
+                    equalShops.add(i,shopNames1.get(i));
+                }
+
+            }
+            System.out.println("Powtarzające sie sklepy "+equalShops);
+        }
+    }
+

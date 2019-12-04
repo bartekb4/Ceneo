@@ -12,27 +12,37 @@ public class Main {
         SearchException searchException = new SearchException();
 
         CeneoAPIHandler cc = new CeneoAPIHandler();
-        CeneoAPIHandler cc1=new CeneoAPIHandler();
+        CeneoAPIHandler cc2=new CeneoAPIHandler();
+        CeneoAPIHandler cc3=new CeneoAPIHandler();
 
         DataProcessor dp = new DataProcessor();
         DataProcessor dp2 = new DataProcessor();
+        DataProcessor dp3 = new DataProcessor();
 
         Item pralka = new Item();
         Item suszarka=new Item();
-        pralka.setName("acer swift 3");
-        suszarka.setName("red dead redeption 2");
+        Item cos=new Item();
+        pralka.setName("laptop dell inspiron 7880");
+        suszarka.setName("gra red dead redemption 2");
+        cos.setName("laptop acer swift 3");
  //0565cee8d226e513c73abc146619121e71dc116c
         pralka.setMin_price(0);
         pralka.setMax_price(0);
         pralka.setMin_reputation(90);
+        suszarka.setMin_reputation(90);
+        cos.setMin_reputation(90);
         suszarka.setMin_price(0);
         suszarka.setMax_price(0);
+        cos.setMin_price(0);
+        cos.setMax_price(0);
         cc.setItem(pralka);
-        cc1.setItem(suszarka);
+        cc2.setItem(suszarka);
+        cc3.setItem(cos);
 
 
         try {
-            dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation()),dp2.request_product_soup(cc1,cc1.getItem().getMin_reputation()));
+            dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation())
+                    ,dp2.request_product_soup(cc2,cc2.getItem().getMin_reputation()),dp3.request_product_soup(cc3,cc3.getItem().getMin_reputation()));
             //dp2.find_best_deal_for_id(dp2.request_product_soup(cc1),cc1.getItem().getMin_reputation());//Troche spaghetti z tym min rep, ale na razie dziala
         } catch (HttpStatusException e) {
             searchException.userError("Co robisz bandyto","Halko");

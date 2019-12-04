@@ -23,12 +23,12 @@ public class DataProcessor {
     private List<Double> pricesShopList2 = new ArrayList<>();
     private List<Double> starList = new ArrayList<>();
     private List<Double> opinionList = new ArrayList<>();
-    private List<Double> priceWithDelivMod2 = new ArrayList<>();
+    private List<String> priceWithDelivMod2 = new ArrayList<String>();
     private List<Integer> shopNumbers = new ArrayList<>();
     private List<String> delieveryCostsMod = new ArrayList<>();
     private List<Integer> potentialPrices = new ArrayList<>();
     private List<Integer> potentialSellers = new ArrayList<>();
-    private ArrayList<List<Object>> endResults = new ArrayList<>();
+    private List<String> endResults = new ArrayList<>();
     private List<String> shopNames = new ArrayList<>();
     private List<String> delieveryCosts = new ArrayList<String>();
     private List<String> priceWithDeliv = new ArrayList<>();
@@ -112,7 +112,7 @@ public class DataProcessor {
 
 
     //        TODO wyrzuca wyjatki kiedy nie znaleziono produktow
-    public ArrayList<List<Object>> request_product_soup(CeneoAPIHandler ceneoAPIHandler, double minRep) throws ParseException, IOException {
+    public List<String> request_product_soup(CeneoAPIHandler ceneoAPIHandler, double minRep) throws ParseException, IOException {
 
         product_soup = ceneoAPIHandler.send_product_request("https://www.ceneo.pl" + find_best_product_ids(ceneoAPIHandler) + ";0284-0.htm").get();
         //return product_soup;
@@ -148,13 +148,11 @@ public class DataProcessor {
             delieveryCosts.add((t.getElementsByClass("product-delivery-info js_deliveryInfo").text().toString()));
         }
         //System.out.println("Linki do sklepow: " + shopLinkList.size());
-        System.out.println("Cenki w sklepie: " + pricesShopList);
-        System.out.println("Nazwy sklepow: " + shopNames);
-        System.out.println("Dostawa: " + delieveryCosts);
+
 
         double minOpin = 20; //tu wpisane z palca
 
-        for (int i = 0; i < opinionList.size(); i++) {    //wybieram tak na chama potencjalnych sprzedawcow i daje ich do listy
+        for (int i = 0; i < shopNames.size(); i++) {    //wybieram tak na chama potencjalnych sprzedawcow i daje ich do listy
             if (starList.get(i) > minRep && opinionList.get(i) > minOpin) {
                 shopNames.remove(i);
                 pricesShopList.remove(i);
@@ -175,24 +173,26 @@ public class DataProcessor {
             }
             //tu jest jazda xd  #don't judge me
             //ta lista jest pomocnicza do przekonwertowania na liczby tesktu z wysylka x zl
-            priceWithDelivMod.add(Double.valueOf(priceWithDeliv.get(i).replaceAll("Z wysyłką od ", "").replaceAll(" zł", "").replaceAll(",",".")));
+            priceWithDelivMod.add(Double.valueOf(priceWithDeliv.get(i).replaceAll("Z wysyłką od ", "").replaceAll(" zł", "").replaceAll(",", ".")));
             //ta jest do przekonwertowania wszystkich cen na double
             pricesShopList2.add(Double.valueOf(pricesShopList.get(i)));
             //a tutaj wyliczam koszt wysylki odejmujac koszt przedmiotu z wysylka i koszt wysylki
-            priceWithDelivMod2.add(i, Double.valueOf(Math.round(priceWithDelivMod.get(i)-pricesShopList2.get(i))));
+            priceWithDelivMod2.add(i, String.valueOf(Math.round(priceWithDelivMod.get(i) - pricesShopList2.get(i))));
         }
         //ceny w liczbach
         System.out.println("Koszty dostawy  " + priceWithDelivMod2);
 
-        endResults.add(Collections.singletonList(shopNames));
-        endResults.add(Collections.singletonList(priceWithDelivMod2));   //Do tej listy list xd jest dodane nazwy sklepow, koszt bez dostawy,
-        endResults.add(Collections.singletonList(pricesShopList2));       //i koszt dostawy, to wszystko jest po to zeby sie dalo to jakos przekazac
+        endResults.addAll(shopNames);
+        endResults.addAll(priceWithDelivMod2);   //Do tej listy list xd jest dodane nazwy sklepow, koszt bez dostawy,
+        endResults.addAll(pricesShopList);       //i koszt dostawy, to wszystko jest po to zeby sie dalo to jakos przekazac
         System.out.println(endResults);                                  //do nastepnej funkcji, i w niej porownywac dla kilku obiektow szukanych
 
 
+        System.out.println(endResults);
+        return endResults;
 
 //Teoretycznie do przerzucenia do Klasy Output ale nie mam pomyslu jak
-        System.out.println("\n \n \n \nWyniki: ");
+     /*   System.out.println("\n \n \n \nWyniki: ");
 
         System.out.println("Dzien dobry, proponuje: \n");
 
@@ -204,24 +204,155 @@ public class DataProcessor {
             System.out.println("http://www.ceneo.pl" + shopLinkList.get(i) + "\n");  //linki
         }
 
-        return endResults;
-
+    }
+    */
     }
 
-    public List<String> find_best_deal_for_id(ArrayList<List<Object>> endResults1, ArrayList<List<Object>> endResults2) {
+    public List<String> find_best_deal_for_id(List<String> endResults1, List<String> endResults2, List<String> endResults3) {
         List<String> equalShops = new ArrayList<>();
-        List<String> lowestPrices = new ArrayList<>();
+        List<String> equalShops2 = new ArrayList<>();
+        List<String> equalShops3 = new ArrayList<>();
 
+        List<String> shopNamesSublist1 = new ArrayList<>();
+        List<String> shopNamesSublist2 = new ArrayList<>();
+        List<String> shopNamesSublist3 = new ArrayList<>();
+        List<String> delcostSublist1 = new ArrayList<>();
+        List<String> delcostSublist2 = new ArrayList<>();
+        List<String> delcostSublist3 = new ArrayList<>();
+        List<String> priceSublist1 = new ArrayList<>();
+        List<String> priceSublist2 = new ArrayList<>();
+        List<String> priceSublist3 = new ArrayList<>();
+
+        shopNamesSublist1.addAll(endResults1.subList(0, endResults1.size() / 3));
+        shopNamesSublist2.addAll(endResults2.subList(0, endResults2.size() / 3));
+        shopNamesSublist3.addAll(endResults3.subList(0, endResults3.size() / 3));
+
+        delcostSublist1.addAll(endResults1.subList((endResults1.size() / 3), 2*endResults1.size() / 3));
+        delcostSublist2.addAll(endResults2.subList((endResults2.size() / 3), 2*endResults2.size() / 3));
+        delcostSublist3.addAll(endResults3.subList((endResults3.size() / 3), 2*endResults3.size() / 3));
+
+        priceSublist1.addAll(endResults1.subList((2*endResults1.size() / 3), endResults1.size()));
+        priceSublist2.addAll(endResults2.subList((2*endResults2.size() / 3), endResults2.size()));
+        priceSublist3.addAll(endResults3.subList((2*endResults3.size() / 3), endResults3.size()));
+
+        System.out.println(shopNamesSublist1);
+        System.out.println(shopNamesSublist2);
+        System.out.println(shopNamesSublist3);
+        System.out.println(delcostSublist1);
+        System.out.println(delcostSublist2);
+        System.out.println(delcostSublist3);
+        System.out.println(priceSublist1);
+        System.out.println(priceSublist2);
+        System.out.println(priceSublist3);
+        int biggest_result = Math.max(Math.max(shopNamesSublist1.size(), shopNamesSublist2.size()), shopNamesSublist3.size());
+        System.out.println(biggest_result);
         //TODO:Warunki zeby iterowalo po krotszej
-        for (int i = 0; i < endResults1.size()/2; i++) {
-            if (!endResults1.get(i).equals(endResults2.get(i))) {
-                equalShops.add(i, String.valueOf(endResults1.get(i)));   //tu sprwadzam sklepu powtarzajace sie w listach
-            }
+
+        for (String name : shopNamesSublist2) {
+            boolean in2 = shopNamesSublist1.contains(name);
+            boolean in3 = shopNamesSublist3.contains(name);
+            if (in2 && in3)
+                equalShops2.add(name);
+            else if (!in2 && in3)
+                equalShops2.add(name);
+            else if (in2 && !in3)
+                equalShops2.add(name);
         }
-        System.out.println("Powtarzające sie sklepy " + equalShops);
-        System.out.println("Powtarzające sie sklepy " + lowestPrices);
-        return equalShops;
-        //no i teraz jest grubo, na moje oko, trzeba teraz wrocic do tych sklepow ktore sie powtarzaja w obu listach, i zobaczyc ich koszt wysylki
-        //no i cene oferty
+
+            //System.out.println("Powtarzające sie sklepy " + equalShops);
+            System.out.println("Powtarzające sie sklepy " + equalShops2);
+            double combined_price=0;
+
+
+            List<Integer> shop_index1 = new ArrayList<>();
+            List<Integer> shop_index2 = new ArrayList<>();
+            List<Integer> shop_index3 = new ArrayList<>();
+
+            if(equalShops2.size()!=0){
+                for (String name : equalShops2) {
+                    if(shopNamesSublist1.contains(name)){
+                        shop_index1.add(shopNamesSublist1.indexOf(name));
+                    }
+                    if(shopNamesSublist2.contains(name)){
+                        shop_index2.add(shopNamesSublist2.indexOf(name));
+                    }
+                    if(shopNamesSublist3.contains(name)){
+                        shop_index3.add(shopNamesSublist3.indexOf(name));
+                    }
+                }
+            }
+            List <Double> final_price1=new ArrayList<>();
+            List <Double> final_price2=new ArrayList<>();
+            List <Double> final_price3=new ArrayList<>();
+            List <Double> final_priceMinDel1=new ArrayList<>();
+            List <Double> final_priceMinDel2=new ArrayList<>();
+            List <Double> final_priceMinDel3=new ArrayList<>();
+            System.out.println(shop_index1);
+            System.out.println(shop_index2);
+            System.out.println(shop_index3);
+            for(int i=0;i<priceSublist1.size();i++){
+                final_price1.add(Double.valueOf(priceSublist1.get(i))+Double.valueOf(delcostSublist1.get(i)));
+            }
+            for(int i=0;i<priceSublist2.size();i++){
+                final_price2.add(Double.valueOf(priceSublist2.get(i))+Double.valueOf(delcostSublist2.get(i)));
+            }
+            for(int i=0;i<priceSublist3.size();i++){
+                final_price3.add(Double.valueOf(priceSublist3.get(i))+Double.valueOf(delcostSublist3.get(i)));
+            }
+            System.out.println(final_price1.size());
+            System.out.println(final_price2.size());
+            System.out.println(final_price3.size());
+            Collections.sort(final_price1);
+            Collections.sort(final_price2);
+            Collections.sort(final_price3);
+            System.out.println(shop_index2.isEmpty());
+            System.out.println(equalShops2.isEmpty());
+            if (equalShops2.isEmpty()) {
+                System.out.println(final_price1.get(0)+final_price2.get(0)+final_price3.get(0));
+            }
+            else if(!equalShops2.isEmpty()) {
+
+                if(shop_index1.isEmpty()) {
+                    System.out.println(shop_index1);
+                    final_priceMinDel1.add(final_price1.get(0));
+                }
+                else {
+                    for (int i = 0; i < equalShops2.size(); i++) {
+                        System.out.println(shop_index1);
+                        final_priceMinDel1.add(final_price1.get(shop_index1.get(i)));
+                    }
+                }
+                if(shop_index2.isEmpty()) {
+                    final_priceMinDel2.add(final_price2.get(0));
+                }
+                else {
+                    for (int i = 0; i < equalShops2.size(); i++) {
+                        System.out.println(shop_index2);
+                        final_priceMinDel2.add(final_price2.get(shop_index2.get(i)));
+                    }
+                }
+                if (shop_index3.isEmpty()) {
+                    final_priceMinDel3.add(final_price3.get(0));
+                }
+                else {
+                    for (int i = 0; i < equalShops2.size(); i++) {
+                        System.out.println(shop_index3);
+                        final_priceMinDel3.add(final_price3.get(shop_index3.get(i)));
+                    }
+                }
+            }
+
+            Collections.sort(final_priceMinDel1);
+            Collections.sort(final_priceMinDel2);
+            Collections.sort(final_priceMinDel3);
+            System.out.println(final_priceMinDel1);
+            System.out.println(final_priceMinDel2);
+            System.out.println(final_priceMinDel3);
+            double finMinDelivPrice=final_priceMinDel1.get(0)+final_priceMinDel2.get(0)+final_price3.get(0);
+            double finMinPrice=final_price1.get(0)+final_price2.get(0)+final_price3.get(0);
+            double result=Math.min(finMinDelivPrice,finMinPrice);
+            System.out.println("\n \n \n \n Miejmy nadzieje ze to jest poprawny wynik:  "+result);
+            return equalShops;
+        }
     }
-}
+

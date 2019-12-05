@@ -370,6 +370,7 @@ public class DataProcessor {
             double finMinPrice=final_price1.get(0)+final_price2.get(0)+final_price3.get(0);
             double result=Math.min(finMinDelivPrice,finMinPrice);
             System.out.println(finMinPrice);
+            // zapomnialem, trzeba odjac dostawe od finMinDelivPrice, ale to powinno byc easy
             //Trzeba wrocic do linku, ew.nazwy?
             System.out.println("\n \n \n \n Miejmy nadzieje ze to jest poprawny wynik:  "+result);
             return equalShops2;

@@ -22,9 +22,9 @@ public class Main {
         Item pralka = new Item();
         Item suszarka=new Item();
         Item cos=new Item();
-        pralka.setName("laptop dell inspiron 7880");
-        suszarka.setName("gra red dead redemption 2");
-        cos.setName("laptop acer swift 3");
+        pralka.setName("xbox one");
+        suszarka.setName("fifa 19 xbox one");
+        cos.setName("red dead redeption 2 xbox one");
  //0565cee8d226e513c73abc146619121e71dc116c
         pralka.setMin_price(0);
         pralka.setMax_price(0);

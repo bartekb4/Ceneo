@@ -233,6 +233,7 @@ public class DataProcessor {
 
 
         //To ponizej to chyba jest glupie bardzo ale dziala, po prostu z tej duzej listy wybieram mniejsze
+        //one z warunkow wczesniejszych powinny byc takie same wiec to raczej dziala
         shopNamesSublist1.addAll(endResults1.subList(0, endResults1.size() / 4));
         shopNamesSublist2.addAll(endResults2.subList(0, endResults2.size() / 4));
         shopNamesSublist3.addAll(endResults3.subList(0, endResults3.size() / 4));
@@ -328,14 +329,14 @@ public class DataProcessor {
             //Tutaj troche kosmos, biore sobie ceny dla tych sklepow ktore sie powtarzaja i wrzucam je do nowej listy
             else if(!equalShops2.isEmpty()) {
 
-                if(shop_index1.isEmpty()) {
+                if(shop_index1.isEmpty()) { //jezeli sie nie powtarza sklep to dodaje najtansza oferte
                     System.out.println(shop_index1);
                     final_priceMinDel1.add(final_price1.get(0));
                 }
                 else {
                     for (int i = 0; i < shop_index1.size(); i++) {
-                        System.out.println(shop_index1);
-                        final_priceMinDel1.add(final_price1.get(shop_index1.get(i)));
+                        System.out.println(shop_index1); 
+                        final_priceMinDel1.add(final_price1.get(shop_index1.get(i))); //tu dodaje ceny z powtarzajcych sie sklepow do listy
                     }
                 }
                 if(shop_index2.isEmpty()) {
@@ -371,7 +372,7 @@ public class DataProcessor {
             double result=Math.min(finMinDelivPrice,finMinPrice);
             System.out.println(finMinPrice);
             // zapomnialem, trzeba odjac dostawe od finMinDelivPrice, ale to powinno byc easy
-            //Trzeba wrocic do linku, ew.nazwy?
+            //Trzeba wrocic do linku, ew.nazwy? dla najnizszej ceny
             System.out.println("\n \n \n \n Miejmy nadzieje ze to jest poprawny wynik:  "+result);
             return equalShops2;
         }

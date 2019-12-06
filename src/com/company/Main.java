@@ -26,6 +26,16 @@ public class Main {
         int ile_przedmiotow = 404; //ile przedmiotow wyszukujemy
 
 
+
+
+
+/*    szybkie zakomentowanie dynamicznego
+
+
+
+
+
+
         //Ilosc produktow do porownania
         System.out.println("Ile różnych przedmiotów chcesz wyszukać? [1-3]:");
         String input = "";
@@ -112,48 +122,51 @@ public class Main {
         }
 
 
+    szybkie zakomentowanie dynamicznego
+*/
 
 
-//
-////
-//        Item pralka = new Item();
-//        Item suszarka = new Item();
-//        Item cos = new Item();
-//
-//        pralka.setName("xbox");
-//        suszarka.setName("rower");
-//        cos.setName("red dead redeption 2 xbox one");
-// //0565cee8d226e513c73abc146619121e71dc116c
-//        pralka.setMin_price(0);
-//        pralka.setMax_price(0);
-//        pralka.setMin_reputation(0);
-//        suszarka.setMin_reputation(0);
-//        cos.setMin_reputation(90);
-//        suszarka.setMin_price(0);
-//        suszarka.setMax_price(0);
-//        cos.setMin_price(0);
-//        cos.setMax_price(0);
-//        cc.setItem(pralka);
-//        cc2.setItem(suszarka);
-//        cc3.setItem(cos);
-////
-////
+
 //
 //
-//        try {
-//            //dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation())
-//                 //   ,dp2.request_product_soup(cc2,cc2.getItem().getMin_reputation()),dp3.request_product_soup(cc3,cc3.getItem().getMin_reputation()));
-//            //dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation()));
+        Item pralka = new Item();
+        Item suszarka = new Item();
+        Item cos = new Item();
+
+        pralka.setName("sdfhsfghsfghghj");
+        suszarka.setName("rower");
+        cos.setName("red dead redeption 2 xbox one");
+ //0565cee8d226e513c73abc146619121e71dc116c
+        pralka.setMin_price(0);
+        pralka.setMax_price(0);
+        pralka.setMin_reputation(0);
+        suszarka.setMin_reputation(0);
+        cos.setMin_reputation(90);
+        suszarka.setMin_price(0);
+        suszarka.setMax_price(0);
+        cos.setMin_price(0);
+        cos.setMax_price(0);
+        cc.setItem(pralka);
+        cc2.setItem(suszarka);
+        cc3.setItem(cos);
 //
 //
-//            dp.find_best_deal_for_id(dp.request_product_soup(cc)
+
+
+        try {
+            //dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation())
+                 //   ,dp2.request_product_soup(cc2,cc2.getItem().getMin_reputation()),dp3.request_product_soup(cc3,cc3.getItem().getMin_reputation()));
+            //dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation()));
+
+
+            dp.find_best_deal_for_id(dp.request_product_soup(cc));
 //                    ,dp2.request_product_soup(cc2));
-//            //dp2.find_best_deal_for_id(dp2.request_product_soup(cc1),cc1.getItem().getMin_reputation());//Troche spaghetti z tym min rep, ale na razie dziala
-//        } catch (HttpStatusException e) {
-//            searchException.userError("Co robisz bandyto","Halko");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+            //dp2.find_best_deal_for_id(dp2.request_product_soup(cc1),cc1.getItem().getMin_reputation());//Troche spaghetti z tym min rep, ale na razie dziala
+        } catch (HttpStatusException e) {
+            searchException.userError("Co robisz bandyto","Halko");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
 

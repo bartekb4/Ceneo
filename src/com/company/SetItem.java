@@ -4,11 +4,14 @@ import java.util.Scanner;
 
 public class SetItem {
 
-    public Item Set(Item item, boolean end){
+    private Item swap = new Item();
+
+    public Item Set(boolean first){
+
 
         Scanner user_text = new Scanner(System.in);
         String input;
-        if(end){
+        if(first){
             System.out.println("Podaj nazwę produktu:");
 
         }else{
@@ -17,24 +20,24 @@ public class SetItem {
         }
 
         input = user_text.nextLine();
-        item.setName(input);
+        swap.setName(input);
 
 
-        int ile_int = 404;
-        double ile_double = -99.99;
+        double min_price  = 404;
+        double number_double = -99.99;
 
 
         System.out.println("Podaj minimalną reputację sprzedającego:");
         do{
             try {
                 input = user_text.nextLine();
-                ile_int = Integer.valueOf(input);
+                number_double = Double.valueOf(input);
             }
             catch (NumberFormatException e) {
                 System.out.println("Podaj wartość z zakresu [0-100]:");
             }
-        }while(ile_int > 100 || ile_int <0);
-        item.setMin_reputation(ile_int);
+        }while(number_double > 100 || number_double <0);
+        swap.setMin_reputation(number_double);
 
 
 
@@ -42,13 +45,14 @@ public class SetItem {
         do{
             try {
                 input = user_text.nextLine();
-                ile_double = Double.valueOf(input);
+                number_double = Double.valueOf(input);
+                min_price = number_double;
             }
             catch (NumberFormatException e) {
                 System.out.println("Podaj liczbę większą lub równą 0:");
             }
-        }while(ile_double < 0);
-        item.setMin_price(ile_double);
+        }while(number_double < 0);
+        swap.setMin_price(number_double);
 
 
 
@@ -56,15 +60,15 @@ public class SetItem {
         do{
             try {
                 input = user_text.nextLine();
-                ile_double = Double.valueOf(input);
+                number_double = Double.valueOf(input);
             }
             catch (NumberFormatException e) {
                 System.out.println("Podaj liczbę większą lub równą 0:");
             }
-        }while(ile_double < 0);
-        item.setMax_price(ile_double);
+        }while(number_double < 0);
+        swap.setMax_price(number_double);
 
-        return item;
+        return swap;
     }
 
 

@@ -132,7 +132,9 @@ public class DataProcessor {
 
 
     //        TODO wyrzuca wyjatki kiedy nie znaleziono produktow
-    public List<String> request_product_soup(CeneoAPIHandler ceneoAPIHandler, double minRep) throws ParseException, IOException {
+    public List<String> request_product_soup(CeneoAPIHandler ceneoAPIHandler) throws ParseException, IOException {
+        double minRep = ceneoAPIHandler.getItem().getMin_reputation();
+
         if (find_best_product_ids(ceneoAPIHandler) == null) {
             System.out.println("tez pusto");
         } else {

@@ -24,101 +24,134 @@ public class Main {
 
 
         int ile_przedmiotow = 404; //ile przedmiotow wyszukujemy
-//
-//        Item item1 = new Item();
-//        Item item2 = new Item();
-//        Item item3 = new Item();
-//
-//
-//        //Ilosc produktow do porownania
-//        System.out.println("Ile różnych przedmiotów chcesz wyszukać? [1-3]:");
-//        String input = "";
-//        do{
-//            try {
-//                input = user_text.nextLine();
-//                ile_przedmiotow = Integer.valueOf(input);
-//            }
-//            catch (NumberFormatException e) {
-//                System.out.println("Podaj wartość z zakresu [1-3]:");
-//            }
-//        }while(ile_przedmiotow > 4 || ile_przedmiotow <0);
-//
-//
-//        SetItem Creator = new SetItem(); //klasa do obslugi konsoli
-//
-//        //tworzenie zapytan
-//        switch(ile_przedmiotow){
-//
-//            case 0:
-//                System.out.println("Dziękujemy za skorzystanie z naszej wyszukiwarki. Może następnym razem uda nam się jakoś pomóc");
-//                return;
-//
-//            case 1:
-//                item1 = Creator.Set(item1,true);
-//                cc.setItem(item1);
-//                break;
-//
-//            case 2:
-//                item1 = Creator.Set(item1,true);
-//                item2 = Creator.Set(item1,false);
-//                cc.setItem(item1);
-//                cc.setItem(item2);
-//                break;
-//
-//            case 3:
-//                item1 = Creator.Set(item1,true);
-//                item2 = Creator.Set(item1,false);
-//                item3 = Creator.Set(item1,false);
-//                cc.setItem(item1);
-//                cc.setItem(item2);
-//                cc.setItem(item3);
-//                break;
-//        }
+
+
+        //Ilosc produktow do porownania
+        System.out.println("Ile różnych przedmiotów chcesz wyszukać? [1-3]:");
+        String input = "";
+        do{
+            try {
+                input = user_text.nextLine();
+                ile_przedmiotow = Integer.valueOf(input);
+            }
+            catch (NumberFormatException e) {
+                System.out.println("Podaj wartość z zakresu [1-3]:");
+            }
+        }while(ile_przedmiotow > 4 || ile_przedmiotow <0);
+
+
+
+        switch(ile_przedmiotow){        //tworzenie zapytan
 
 
 
 
-
-//
-        Item pralka = new Item();
-        Item suszarka = new Item();
-        Item cos = new Item();
-
-        pralka.setName("xbox one");
-        suszarka.setName("bhbyhnkk");
-        cos.setName("red dead redeption 2 xbox one");
- //0565cee8d226e513c73abc146619121e71dc116c
-        pralka.setMin_price(0);
-        pralka.setMax_price(0);
-        pralka.setMin_reputation(90);
-        suszarka.setMin_reputation(90);
-        cos.setMin_reputation(90);
-        suszarka.setMin_price(0);
-        suszarka.setMax_price(0);
-        cos.setMin_price(0);
-        cos.setMax_price(0);
-        cc.setItem(pralka);
-        cc2.setItem(suszarka);
-        cc3.setItem(cos);
-//
-//
+            case 0:
+                System.out.println("Dziękujemy za skorzystanie z naszej wyszukiwarki. Może następnym razem uda nam się jakoś pomóc");
+                return;
 
 
-        try {
-            //dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation())
-                 //   ,dp2.request_product_soup(cc2,cc2.getItem().getMin_reputation()),dp3.request_product_soup(cc3,cc3.getItem().getMin_reputation()));
-            //dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation()));
+
+            case 1:
+                SetItem Creator = new SetItem();
+
+                cc.setItem(Creator.Set(true));
+
+                try {
+                    dp.find_best_deal_for_id(dp.request_product_soup(cc));
+                } catch (HttpStatusException e) {
+                    searchException.userError("Co robisz bandyto","Halko");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                break;
 
 
-            dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation())
-                    ,dp2.request_product_soup(cc2,cc2.getItem().getMin_reputation()));
-            //dp2.find_best_deal_for_id(dp2.request_product_soup(cc1),cc1.getItem().getMin_reputation());//Troche spaghetti z tym min rep, ale na razie dziala
-        } catch (HttpStatusException e) {
-            searchException.userError("Co robisz bandyto","Halko");
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            case 2:
+                SetItem Creator21 = new SetItem();
+                SetItem Creator22 = new SetItem();
+
+                cc.setItem(Creator21.Set(true));
+                cc2.setItem(Creator22.Set(false));
+
+                try {
+                    dp.find_best_deal_for_id(dp.request_product_soup(cc),dp.request_product_soup(cc2));
+                } catch (HttpStatusException e) {
+                    searchException.userError("Co robisz bandyto","Halko");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                break;
+
+
+
+            case 3:
+                SetItem Creator31 = new SetItem();
+                SetItem Creator32 = new SetItem();
+                SetItem Creator33 = new SetItem();
+
+                cc.setItem(Creator31.Set(true));
+                cc2.setItem(Creator32.Set(false));
+                cc3.setItem(Creator33.Set(false));
+
+                try {
+                    dp.find_best_deal_for_id(dp.request_product_soup(cc),dp.request_product_soup(cc2),dp.request_product_soup(cc3));
+                } catch (HttpStatusException e) {
+                    searchException.userError("Co robisz bandyto","Halko");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                break;
         }
 
+
+
+
+//
+////
+//        Item pralka = new Item();
+//        Item suszarka = new Item();
+//        Item cos = new Item();
+//
+//        pralka.setName("xbox one");
+//        suszarka.setName("bhbyhnkk");
+//        cos.setName("red dead redeption 2 xbox one");
+// //0565cee8d226e513c73abc146619121e71dc116c
+//        pralka.setMin_price(0);
+//        pralka.setMax_price(0);
+//        pralka.setMin_reputation(90);
+//        suszarka.setMin_reputation(90);
+//        cos.setMin_reputation(90);
+//        suszarka.setMin_price(0);
+//        suszarka.setMax_price(0);
+//        cos.setMin_price(0);
+//        cos.setMax_price(0);
+//        cc.setItem(pralka);
+//        cc2.setItem(suszarka);
+//        cc3.setItem(cos);
+////
+////
+
+
+//        try {
+//            //dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation())
+//                 //   ,dp2.request_product_soup(cc2,cc2.getItem().getMin_reputation()),dp3.request_product_soup(cc3,cc3.getItem().getMin_reputation()));
+//            //dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation()));
+//
+//
+//            dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation())
+//                    ,dp2.request_product_soup(cc2,cc2.getItem().getMin_reputation()));
+//            //dp2.find_best_deal_for_id(dp2.request_product_soup(cc1),cc1.getItem().getMin_reputation());//Troche spaghetti z tym min rep, ale na razie dziala
+//        } catch (HttpStatusException e) {
+//            searchException.userError("Co robisz bandyto","Halko");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
 
 
 

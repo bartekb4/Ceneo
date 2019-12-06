@@ -24,7 +24,7 @@ public class SetItem {
         double ile_double = -99.99;
 
 
-        System.out.println("Podaj minimalną reputację produktu:");
+        System.out.println("Podaj minimalną reputację sprzedającego:");
         do{
             try {
                 input = user_text.nextLine();
@@ -52,7 +52,7 @@ public class SetItem {
 
 
 
-        System.out.println("Podaj maksymalną cenę produktu:");
+        System.out.println("Podaj maksymalną cenę produktu [0 - brak ceny maksymalnej]:");
         do{
             try {
                 input = user_text.nextLine();

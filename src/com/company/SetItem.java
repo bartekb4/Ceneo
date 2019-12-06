@@ -20,10 +20,9 @@ public class SetItem {
         }
 
         input = user_text.nextLine();
-        swap.setName(input);
+        this.swap.setName(input);
 
 
-        double min_price  = 404;
         double number_double = -99.99;
 
 
@@ -37,7 +36,7 @@ public class SetItem {
                 System.out.println("Podaj wartość z zakresu [0-100]:");
             }
         }while(number_double > 100 || number_double <0);
-        swap.setMin_reputation(number_double);
+        this.swap.setMin_reputation(number_double);
 
 
 
@@ -46,13 +45,12 @@ public class SetItem {
             try {
                 input = user_text.nextLine();
                 number_double = Double.valueOf(input);
-                min_price = number_double;
             }
             catch (NumberFormatException e) {
                 System.out.println("Podaj liczbę większą lub równą 0:");
             }
         }while(number_double < 0);
-        swap.setMin_price(number_double);
+        this.swap.setMin_price(number_double);
 
 
 
@@ -66,9 +64,9 @@ public class SetItem {
                 System.out.println("Podaj liczbę większą lub równą 0:");
             }
         }while(number_double < 0);
-        swap.setMax_price(number_double);
+        this.swap.setMax_price(number_double);
 
-        return swap;
+        return this.swap;
     }
 
 

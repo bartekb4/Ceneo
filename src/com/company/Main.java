@@ -47,12 +47,14 @@ public class Main {
 
 
             case 0:
+
                 System.out.println("Dziękujemy za skorzystanie z naszej wyszukiwarki. Może następnym razem uda nam się jakoś pomóc");
                 return;
 
 
 
             case 1:
+
                 SetItem Creator = new SetItem();
 
                 cc.setItem(Creator.Set(true));
@@ -77,7 +79,7 @@ public class Main {
                 cc2.setItem(Creator22.Set(false));
 
                 try {
-                    dp.find_best_deal_for_id(dp.request_product_soup(cc),dp.request_product_soup(cc2));
+                    dp.find_best_deal_for_id(dp.request_product_soup(cc),dp2.request_product_soup(cc2));
                 } catch (HttpStatusException e) {
                     searchException.userError("Co robisz bandyto","Halko");
                 } catch (IOException e) {
@@ -89,6 +91,7 @@ public class Main {
 
 
             case 3:
+
                 SetItem Creator31 = new SetItem();
                 SetItem Creator32 = new SetItem();
                 SetItem Creator33 = new SetItem();
@@ -98,7 +101,7 @@ public class Main {
                 cc3.setItem(Creator33.Set(false));
 
                 try {
-                    dp.find_best_deal_for_id(dp.request_product_soup(cc),dp.request_product_soup(cc2),dp.request_product_soup(cc3));
+                    dp.find_best_deal_for_id(dp.request_product_soup(cc),dp2.request_product_soup(cc2),dp3.request_product_soup(cc3));
                 } catch (HttpStatusException e) {
                     searchException.userError("Co robisz bandyto","Halko");
                 } catch (IOException e) {
@@ -117,14 +120,14 @@ public class Main {
 //        Item suszarka = new Item();
 //        Item cos = new Item();
 //
-//        pralka.setName("xbox one");
-//        suszarka.setName("bhbyhnkk");
+//        pralka.setName("xbox");
+//        suszarka.setName("rower");
 //        cos.setName("red dead redeption 2 xbox one");
 // //0565cee8d226e513c73abc146619121e71dc116c
 //        pralka.setMin_price(0);
 //        pralka.setMax_price(0);
-//        pralka.setMin_reputation(90);
-//        suszarka.setMin_reputation(90);
+//        pralka.setMin_reputation(0);
+//        suszarka.setMin_reputation(0);
 //        cos.setMin_reputation(90);
 //        suszarka.setMin_price(0);
 //        suszarka.setMax_price(0);
@@ -135,23 +138,23 @@ public class Main {
 //        cc3.setItem(cos);
 ////
 ////
-
-
+//
+//
 //        try {
 //            //dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation())
 //                 //   ,dp2.request_product_soup(cc2,cc2.getItem().getMin_reputation()),dp3.request_product_soup(cc3,cc3.getItem().getMin_reputation()));
 //            //dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation()));
 //
 //
-//            dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation())
-//                    ,dp2.request_product_soup(cc2,cc2.getItem().getMin_reputation()));
+//            dp.find_best_deal_for_id(dp.request_product_soup(cc)
+//                    ,dp2.request_product_soup(cc2));
 //            //dp2.find_best_deal_for_id(dp2.request_product_soup(cc1),cc1.getItem().getMin_reputation());//Troche spaghetti z tym min rep, ale na razie dziala
 //        } catch (HttpStatusException e) {
 //            searchException.userError("Co robisz bandyto","Halko");
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-//
+
 
 
 

@@ -22,19 +22,7 @@ public class Main {
 
         Scanner user_text = new Scanner(System.in);
 
-
         int ile_przedmiotow = 404; //ile przedmiotow wyszukujemy
-
-
-
-
-
-/*    szybkie zakomentowanie dynamicznego
-
-
-
-
-
 
         //Ilosc produktow do porownania
         System.out.println("Ile różnych przedmiotów chcesz wyszukać? [1-3]:");
@@ -49,18 +37,11 @@ public class Main {
             }
         }while(ile_przedmiotow > 4 || ile_przedmiotow <0);
 
-
-
-        switch(ile_przedmiotow){        //tworzenie zapytan
-
-
-
-
+        switch(ile_przedmiotow){
             case 0:
 
                 System.out.println("Dziękujemy za skorzystanie z naszej wyszukiwarki. Może następnym razem uda nam się jakoś pomóc");
                 return;
-
 
 
             case 1:
@@ -80,7 +61,6 @@ public class Main {
                 break;
 
 
-
             case 2:
                 SetItem Creator21 = new SetItem();
                 SetItem Creator22 = new SetItem();
@@ -97,7 +77,6 @@ public class Main {
                 }
 
                 break;
-
 
 
             case 3:
@@ -120,80 +99,6 @@ public class Main {
 
                 break;
         }
-
-
-    szybkie zakomentowanie dynamicznego
-*/
-
-
-
-//
-//
-        Item pralka = new Item();
-        Item suszarka = new Item();
-        Item cos = new Item();
-
-        pralka.setName("rower");
-        suszarka.setName("rosfghsfghsfghsfghwer");
-        cos.setName("kek");
- //0565cee8d226e513c73abc146619121e71dc116c
-        pralka.setMin_price(0);
-        pralka.setMax_price(0);
-        pralka.setMin_reputation(0);
-        suszarka.setMin_reputation(0);
-        cos.setMin_reputation(90);
-        suszarka.setMin_price(0);
-        suszarka.setMax_price(0);
-        cos.setMin_price(0);
-        cos.setMax_price(0);
-        cc.setItem(pralka);
-        cc2.setItem(suszarka);
-        cc3.setItem(cos);
-//
-//
-
-
-        try {
-            //dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation())
-                 //   ,dp2.request_product_soup(cc2,cc2.getItem().getMin_reputation()),dp3.request_product_soup(cc3,cc3.getItem().getMin_reputation()));
-            //dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation()));
-
-
-            dp.find_best_deal_for_id(dp.request_product_soup(cc)
-                    ,dp2.request_product_soup(cc2),dp3.request_product_soup(cc3));
-//dp2.find_best_deal_for_id(dp2.request_product_soup(cc1),cc1.getItem().getMin_reputation());//Troche spaghetti z tym min rep, ale na razie dziala
-        } catch (HttpStatusException e) {
-            searchException.userError("Co robisz bandyto","Halko");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-
-
-
-
-
-
-
-
-/*        try {
-
-            Throwable throwable = new Throwable("ERROR");
-            searchException = new SearchException("Empty Search", throwable);
-            searchException.emptyResponse(cc.send_search_request());
-        } catch (SearchException e) {
-           e.userError("Co ty robisz", "Halko");
-        }
-        // dp.find_best_product_ids();
-        try {
-            dp.find_best_deal_for_id(dp.request_product_soup(cc)); // przekazanie CeneoAPIHandler
-        } catch (IOException e) {
-            System.err.println("No resp");
-        } catch (ParseException e) {
-            System.err.println("No resp");
-        }
-    }*/
 
     }
 }

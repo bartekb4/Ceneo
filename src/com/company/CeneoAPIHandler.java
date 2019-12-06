@@ -78,10 +78,8 @@ public class CeneoAPIHandler {
 
 
     public Connection send_search_request() throws IOException {
-
         HTTP_search_response=Jsoup.connect(this.url);
-        //HTTP_search_response = connection1.get();
-        System.out.println(HTTP_search_response.response().statusCode());
+//        System.out.println(HTTP_search_response.response().statusCode());
         return HTTP_search_response;
     }
 
@@ -89,8 +87,6 @@ public class CeneoAPIHandler {
 
     public Connection send_product_request(String linkhref) throws IOException {
         HTTP_product_response=Jsoup.connect(linkhref);
-
-        //setProductStatus(HTTP_product_response.response().statusCode());
         return HTTP_product_response;
     }
 

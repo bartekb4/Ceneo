@@ -64,7 +64,7 @@ public class SetItem {
                 number_double = Double.valueOf(input);
 
                 if(number_double < this.min_price && number_double != 0){
-                    System.out.println("Trzeba było wybrać cenę maksymalną większą niż minimalna -_-");
+                    System.out.println("Trzeba było wybrać cenę maksymalną większą niż minimalną -_-");
                     this.swap.setMax_price(0);
                 }
                 else{

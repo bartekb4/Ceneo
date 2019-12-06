@@ -20,6 +20,7 @@ public class UltimateLoggingMachine {
             fh.setFormatter(formatter);
 
             // the following statement is used to log any messages
+            logger.setUseParentHandlers(false);
             logger.info(text);
 
         } catch (SecurityException e) {

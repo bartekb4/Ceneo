@@ -23,7 +23,7 @@ public class Main {
         Item suszarka=new Item();
         Item cos=new Item();
         pralka.setName("xbox one");
-        suszarka.setName("fifa 19 xbox one");
+        suszarka.setName("fifa 20 xbox one");
         cos.setName("red dead redeption 2 xbox one");
  //0565cee8d226e513c73abc146619121e71dc116c
         pralka.setMin_price(0);

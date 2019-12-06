@@ -241,6 +241,9 @@ public class DataProcessor {
         List<String> priceSublist1 = new ArrayList<>();
         List<String> priceSublist2 = new ArrayList<>();
         List<String> priceSublist3 = new ArrayList<>();
+        List<String> linkSublist1 = new ArrayList<>();
+        List<String> linkSublist2 = new ArrayList<>();
+        List<String> linkSublist3 = new ArrayList<>();
 
         //To ponizej to chyba jest glupie bardzo ale dziala, po prostu z tej duzej listy wybieram mniejsze
         //one z warunkow wczesniejszych powinny byc takie same wiec to raczej dziala
@@ -255,6 +258,10 @@ public class DataProcessor {
         priceSublist1.addAll(endResults1.subList((2*endResults1.size() / 4), (3*endResults1.size() / 4)));
         priceSublist2.addAll(endResults2.subList((2*endResults2.size() / 4), (3*endResults2.size() / 4)));
         priceSublist3.addAll(endResults3.subList((2*endResults3.size() / 4), (3*endResults3.size() / 4)));
+
+        linkSublist1.addAll(endResults1.subList((3*endResults1.size() / 4), endResults1.size() / 4));
+        linkSublist2.addAll(endResults2.subList((3*endResults2.size() / 4), endResults2.size() / 4));
+        linkSublist3.addAll(endResults3.subList((3*endResults3.size() / 4), endResults3.size() / 4))
 
         System.out.println(shopNamesSublist1);
         System.out.println(shopNamesSublist2);      //
@@ -378,6 +385,7 @@ public class DataProcessor {
             System.out.println(final_priceMinDel3);
             //Tutaj tylko do testowania tak to napislem, trzeba owarunkowac
             double finMinDelivPrice=final_priceMinDel1.get(0)+final_priceMinDel2.get(0)+final_price3.get(0);
+            double finMinPrice=final_price1.get(0)+final_price2.get(0)+final_price3.get(0);
             double finMinPrice=final_price1.get(0)+final_price2.get(0)+final_price3.get(0);
             double result=Math.min(finMinDelivPrice,finMinPrice);
             System.out.println(finMinPrice);

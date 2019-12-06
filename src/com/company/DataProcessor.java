@@ -386,8 +386,7 @@ public class DataProcessor {
             //Tutaj tylko do testowania tak to napislem, trzeba owarunkowac
             double finMinDelivPrice=final_priceMinDel1.get(0)+final_priceMinDel2.get(0)+final_price3.get(0);
             double finMinPrice=final_price1.get(0)+final_price2.get(0)+final_price3.get(0);
-           // double finMinPrice=final_price1.get(0)+final_price2.get(0)+final_price3.get(0);
-            double result=Math.min(finMinDelivPrice,finMinPrice);
+            double finMinPrice=final_price1.get(0)+final_price2.get(0)+final_price3.get(0);            double result=Math.min(finMinDelivPrice,finMinPrice);
             System.out.println(finMinPrice);
             // zapomnialem, trzeba odjac dostawe od finMinDelivPrice, ale to powinno byc easy
             //Trzeba wrocic do linku, ew.nazwy? dla najnizszej ceny

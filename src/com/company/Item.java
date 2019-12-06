@@ -15,7 +15,7 @@ public class Item {
     public Item(){}
 
     public void setName(String name) {
-        this.name = name.replaceAll(" ", "-");;
+        this.name = name.replaceAll(" ", "-").replaceAll(";","");;
     }
 
     public void setMin_reputation(double min_reputation)

@@ -133,9 +133,9 @@ public class Main {
         Item suszarka = new Item();
         Item cos = new Item();
 
-        pralka.setName("sdfhsfghsfghghj");
+        pralka.setName("kek");
         suszarka.setName("rower");
-        cos.setName("red dead redeption 2 xbox one");
+        cos.setName("gfshsfgjhsgfjsgfhj");
  //0565cee8d226e513c73abc146619121e71dc116c
         pralka.setMin_price(0);
         pralka.setMax_price(0);
@@ -159,9 +159,8 @@ public class Main {
             //dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation()));
 
 
-            dp.find_best_deal_for_id(dp.request_product_soup(cc));
-//                    ,dp2.request_product_soup(cc2));
-            //dp2.find_best_deal_for_id(dp2.request_product_soup(cc1),cc1.getItem().getMin_reputation());//Troche spaghetti z tym min rep, ale na razie dziala
+            dp.find_best_deal_for_id(dp.request_product_soup(cc),dp2.request_product_soup(cc2),dp3.request_product_soup(cc3));
+//dp2.find_best_deal_for_id(dp2.request_product_soup(cc1),cc1.getItem().getMin_reputation());//Troche spaghetti z tym min rep, ale na razie dziala
         } catch (HttpStatusException e) {
             searchException.userError("Co robisz bandyto","Halko");
         } catch (IOException e) {

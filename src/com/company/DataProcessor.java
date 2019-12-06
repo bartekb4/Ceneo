@@ -70,35 +70,12 @@ public class DataProcessor {
             } else
                 System.out.println("Empty");
 
-            //System.out.println("Nazwy"+titlesList);
 
             for (Element t : titles) {
                 urlList.add(t.attr("href")); //dodaje do listy wszysytkie linki pralek
             }
-/*
-        for(int i=0;i<titlesList.size();i++) {
-            value = search_soup.getElementsByAttributeValue("title", titlesList.get(i)).select("span.value,span.penny").text().replaceAll("\\s","").replaceAll(",",".");
-
-            //obejscie wspanialego Ceneo, ktore wysyla wartosci po 2 razy
-            dotIndex = value.indexOf(".");
-            if (dotIndex != -1)
-            {
-                value = value.substring(0, dotIndex+3);
-            }
-            valuesList.add(value);
-
-        }
-
-        tych cen w zasadzie nie trzeba
 
 
-//        System.out.println("Ceny"+valuesList);//tu sie wyswietlaja ceny\
-
-        for(int i=0;i<valuesList.size();i++) {
-            pricesList.add(Double.parseDouble(valuesList.get(i)));
-        }
-
- */
             // System.out.println("Linki"+urlList); //Tu sie wyswietlaja koncowki urli do prodouktu\
             Elements shopNumber = search_soup.select("span.shop-numb");
             for (Element t : shopNumber) {
@@ -112,16 +89,9 @@ public class DataProcessor {
             int mostShops = Collections.max(shopNumbers);
             //System.out.println(shopNumbers.indexOf(mostShops));
 
-//        TODO wyrzuca wyjatki kiedy nie znaleziono produktow
 
             String linkhref = null;
-        /*
-        for(int i=0;i<shopNumbers.size();i++) {
-            if(shopNumbers.get(i)>5){
-                potentialPrices.add(i);
-            }
-        }
-*/
+
             linkhref = urlList.get(shopNumbers.indexOf(mostShops));//wybieram oferte z najwieksza liczba sklepow
             System.out.println(linkhref);
 
@@ -131,7 +101,6 @@ public class DataProcessor {
     }
 
 
-    //        TODO wyrzuca wyjatki kiedy nie znaleziono produktow
     public List<String> request_product_soup(CeneoAPIHandler ceneoAPIHandler) throws ParseException, IOException {
         double minRep = ceneoAPIHandler.getItem().getMin_reputation();
 
@@ -171,7 +140,6 @@ public class DataProcessor {
             for (Element t : deliveryCost) {
                 delieveryCosts.add(String.valueOf((t.getElementsByClass("product-delivery-info js_deliveryInfo").text())));
             }
-            //
 
 
             double minOpin = 20; //tu wpisane z palca
@@ -224,21 +192,7 @@ public class DataProcessor {
             return endResults;
         }
         return null;
-//Teoretycznie do przerzucenia do Klasy Output ale nie mam pomyslu jak
-     /*   System.out.println("\n \n \n \nWyniki: ");
 
-        System.out.println("Dzien dobry, proponuje: \n");
-
-        for (int i = 0; i < 2; i++) {
-            System.out.println("Produkt: " + (i + 1));
-            System.out.println("\nTutaj cenka:");
-            System.out.println(priceWithDelivMod.get(i));   //3 najlepsze ceny - to wszystko dziala na ID w Listach, raczej glupio, ale dziala
-            System.out.println("Tutaj link: ");
-            System.out.println("http://www.ceneo.pl" + shopLinkList.get(i) + "\n");  //linki
-        }
-
-    }
-    */
     }
 
     public void find_best_deal_for_id(List<String> endResults1, List<String> endResults2, List<String> endResults3) {
@@ -248,12 +202,12 @@ public class DataProcessor {
 
 
         if (endResults1==null) {
-            for (int i = 0; i < 10 / 4; i++) {
-                shopNamesSublist1.add(i, "0");
-                delcostSublist1.add(i, "0");
-                priceSublist1.add(i, "0");
-                linkSublist1.add(i, "");
-            }
+
+                shopNamesSublist1.add("0");
+                delcostSublist1.add("0");
+                priceSublist1.add("0");
+                linkSublist1.add("0");
+
 
         } else {
             shopNamesSublist1.addAll(endResults1.subList(0, endResults1.size() / 4));
@@ -269,13 +223,10 @@ public class DataProcessor {
             priceSublist2.addAll(endResults2.subList((2 * endResults2.size() / 4), (3 * endResults2.size() / 4)));
             linkSublist2.addAll(endResults2.subList((3 * endResults2.size() / 4), endResults2.size()));
         } else {
-            for (int i = 0; i<10; i++) {
-                shopNamesSublist2.add(i, "0");
-                delcostSublist2.add(i, "0");
-                priceSublist2.add(i, "0");
-                linkSublist2.add(i, "");
-            }
-
+                shopNamesSublist2.add("0");
+                delcostSublist2.add("0");
+                priceSublist2.add("0");
+                linkSublist2.add("0");
         }
         if (!(endResults3==null)) {
             shopNamesSublist3.addAll(endResults3.subList(0, endResults3.size() / 4));
@@ -284,34 +235,13 @@ public class DataProcessor {
             linkSublist3.addAll(endResults3.subList((3 * endResults3.size() / 4), endResults3.size()));
         }
         else {
-            for (int i = 0; i < 10 / 4; i++) {
-                shopNamesSublist3.add(i, "0");
-                delcostSublist3.add(i, "0");
-                priceSublist3.add(i, "0");
-                linkSublist3.add(i, "");
-            }
+                shopNamesSublist3.add("0");
+                delcostSublist3.add("0");
+                priceSublist3.add("0");
+                linkSublist3.add("0");
         }
 
-        //To ponizej to chyba jest glupie bardzo ale dziala, po prostu z tej duzej listy wybieram mniejsze
-        //one z warunkow wczesniejszych powinny byc takie same wiec to raczej dziala
 
-        /*
-        System.out.println(shopNamesSublist1);
-        System.out.println(shopNamesSublist2);
-        System.out.println(shopNamesSublist3);
-        System.out.println(delcostSublist1);
-        System.out.println(delcostSublist2);
-        System.out.println(delcostSublist3);
-        System.out.println(priceSublist1);
-        System.out.println(priceSublist2);
-        System.out.println(priceSublist3);
-
-        int biggest_result = Math.max(Math.max(shopNamesSublist1.size(), shopNamesSublist2.size()), shopNamesSublist3.size());
-
-        System.out.println(biggest_result);
-
-
-         */
 //Sprawdzam powtarzajace sie sklepy
         for (String name : shopNamesSublist2) {
             boolean in2 = shopNamesSublist1.contains(name);
@@ -379,9 +309,68 @@ public class DataProcessor {
         if (equalShops2.isEmpty()) {
             System.out.println(final_price1.get(0) + final_price2.get(0) + final_price3.get(0));
             double finMinPrice = final_price1.get(0) + final_price2.get(0) + final_price3.get(0);
-            System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
-            System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
-            System.out.println("Produkt 3: " + final_price3.get(0) + " https://www.ceneo.pl" + linkSublist3.get(0));
+
+
+
+
+            if(final_price1.get(0) == 0 && final_price2.get(0) == 0 && final_price3.get(0) == 0){
+                System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+                System.out.println("Produkt 2: Nie znaleziono produktu spełniającego podane kryteria");
+                System.out.println("Produkt 3: Nie znaleziono produktu spełniającego podane kryteria");
+            }
+            else if(final_price1.get(0) == 0 && final_price2.get(0) == 0){
+                System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+                System.out.println("Produkt 2: Nie znaleziono produktu spełniającego podane kryteria");
+                System.out.println("Produkt 3: " + final_price3.get(0) + " https://www.ceneo.pl" + linkSublist3.get(0));
+            }
+            else if(final_price1.get(0) == 0 && final_price3.get(0) == 0){
+                System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+                System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
+                System.out.println("Produkt 3: Nie znaleziono produktu spełniającego podane kryteria");
+            }
+            else if(final_price2.get(0) == 0 && final_price3.get(0) == 0){
+                System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
+                System.out.println("Produkt 2: Nie znaleziono produktu spełniającego podane kryteria");
+                System.out.println("Produkt 3: Nie znaleziono produktu spełniającego podane kryteria");
+            }
+            else if(final_price1.get(0) == 0){
+                System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+                System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
+                System.out.println("Produkt 3: " + final_price3.get(0) + " https://www.ceneo.pl" + linkSublist3.get(0));
+            }
+            else if(final_price2.get(0) == 0){
+                System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
+                System.out.println("Produkt 2: Nie znaleziono produktu spełniającego podane kryteria");
+                System.out.println("Produkt 3: " + final_price3.get(0) + " https://www.ceneo.pl" + linkSublist3.get(0));
+            }
+            else if(final_price3.get(0) == 0){
+                System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
+                System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
+                System.out.println("Produkt 3: Nie znaleziono produktu spełniającego podane kryteria");
+            }
+            else if(final_price1.get(0) != 0 && final_price2.get(0) != 0 && final_price3.get(0) != 0){
+                System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
+                System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
+                System.out.println("Produkt 3: " + final_price3.get(0) + " https://www.ceneo.pl" + linkSublist3.get(0));
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             System.out.println("Cena w sumie " + finMinPrice);//po prostu najtansze
         }
 
@@ -417,15 +406,107 @@ public class DataProcessor {
             double finMinPrice = final_price1.get(0) + final_price2.get(0) + final_price3.get(0);
 
             System.out.println("\n \n \n \n" + "Wyniki:");
+
+
             if (finMinDelivPrice > finMinPrice) {
-                System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
-                System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
-                System.out.println("Produkt 3: " + final_price3.get(0) + " https://www.ceneo.pl" + linkSublist3.get(0));
+
+                if(final_price1.get(0) == 0 && final_price2.get(0) == 0 && final_price3.get(0) == 0){
+                    System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 2: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 3: Nie znaleziono produktu spełniającego podane kryteria");
+                }
+                else if(final_price1.get(0) == 0 && final_price2.get(0) == 0){
+                    System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 2: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 3: " + final_price3.get(0) + " https://www.ceneo.pl" + linkSublist3.get(0));
+                }
+                else if(final_price1.get(0) == 0 && final_price3.get(0) == 0){
+                    System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
+                    System.out.println("Produkt 3: Nie znaleziono produktu spełniającego podane kryteria");
+                }
+                else if(final_price2.get(0) == 0 && final_price3.get(0) == 0){
+                    System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
+                    System.out.println("Produkt 2: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 3: Nie znaleziono produktu spełniającego podane kryteria");
+                }
+                else if(final_price1.get(0) == 0){
+                    System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
+                    System.out.println("Produkt 3: " + final_price3.get(0) + " https://www.ceneo.pl" + linkSublist3.get(0));
+                }
+                else if(final_price2.get(0) == 0){
+                    System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
+                    System.out.println("Produkt 2: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 3: " + final_price3.get(0) + " https://www.ceneo.pl" + linkSublist3.get(0));
+                }
+                else if(final_price3.get(0) == 0){
+                    System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
+                    System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
+                    System.out.println("Produkt 3: Nie znaleziono produktu spełniającego podane kryteria");
+                }
+                else if(final_price1.get(0) != 0 && final_price2.get(0) != 0 && final_price3.get(0) != 0){
+                    System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
+                    System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
+                    System.out.println("Produkt 3: " + final_price3.get(0) + " https://www.ceneo.pl" + linkSublist3.get(0));
+                }
+
+
+
                 System.out.println("Cena w sumie " + finMinPrice);
-            } else {
-                System.out.println("Produkt 1: " + final_priceMinDel1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
-                System.out.println("Produkt 2: " + final_priceMinDel2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
-                System.out.println("Produkt 3: " + final_priceMinDel3.get(0) + " https://www.ceneo.pl" + linkSublist3.get(0));
+            }
+
+
+
+
+
+            else {
+
+                if(final_price1.get(0) == 0 && final_price2.get(0) == 0 && final_price3.get(0) == 0){
+                    System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 2: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 3: Nie znaleziono produktu spełniającego podane kryteria");
+                }
+                else if(final_price1.get(0) == 0 && final_price2.get(0) == 0){
+                    System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 2: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 3: " + final_price3.get(0) + " https://www.ceneo.pl" + linkSublist3.get(0));
+                }
+                else if(final_price1.get(0) == 0 && final_price3.get(0) == 0){
+                    System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
+                    System.out.println("Produkt 3: Nie znaleziono produktu spełniającego podane kryteria");
+                }
+                else if(final_price2.get(0) == 0 && final_price3.get(0) == 0){
+                    System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
+                    System.out.println("Produkt 2: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 3: Nie znaleziono produktu spełniającego podane kryteria");
+                }
+                else if(final_price1.get(0) == 0){
+                    System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
+                    System.out.println("Produkt 3: " + final_price3.get(0) + " https://www.ceneo.pl" + linkSublist3.get(0));
+                }
+                else if(final_price2.get(0) == 0){
+                    System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
+                    System.out.println("Produkt 2: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 3: " + final_price3.get(0) + " https://www.ceneo.pl" + linkSublist3.get(0));
+                }
+                else if(final_price3.get(0) == 0){
+                    System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
+                    System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
+                    System.out.println("Produkt 3: Nie znaleziono produktu spełniającego podane kryteria");
+                }
+                else if(final_price1.get(0) != 0 && final_price2.get(0) != 0 && final_price3.get(0) != 0){
+                    System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
+                    System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
+                    System.out.println("Produkt 3: " + final_price3.get(0) + " https://www.ceneo.pl" + linkSublist3.get(0));
+                }
+
+
+
+
+
                 System.out.println("Cena w sumie: " + finMinDelivPrice);
             }
 
@@ -446,21 +527,25 @@ public class DataProcessor {
     }
 
     public void find_best_deal_for_id(List<java.lang.String> endResults1) {
-        if (!endResults1.isEmpty()) {
+        if (!(endResults1==null)) {
             shopNamesSublist1.addAll(endResults1.subList(0, endResults1.size() / 4));
             delcostSublist1.addAll(endResults1.subList((endResults1.size() / 4), 2 * endResults1.size() / 4));
             priceSublist1.addAll(endResults1.subList((2 * endResults1.size() / 4), (3 * endResults1.size() / 4)));
             linkSublist1.addAll(endResults1.subList((3 * endResults1.size() / 4), endResults1.size()));
         } else {
-            for (int i = 0; i < endResults1.size() / 4; i++) {
-                shopNamesSublist1.add(i, "");
-                delcostSublist1.add(i, "");
-                priceSublist1.add(i, "");
-                linkSublist1.add(i, "");
-            }
+
+                shopNamesSublist1.add("0");
+                delcostSublist1.add("0");
+                priceSublist1.add("0");
+                linkSublist1.add("0");
+
         }
         Double finPrice = Double.valueOf(priceSublist1.get(0) + delcostSublist1.get(0));
-        System.out.println("Produkt 1: " + finPrice + " https://www.ceneo.pl" + linkSublist1.get(0));
+        if(finPrice == 0){
+            System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+        }else {
+            System.out.println("Produkt 1: " + finPrice + " https://www.ceneo.pl" + linkSublist1.get(0));
+        }
     }
 
 
@@ -469,12 +554,12 @@ public class DataProcessor {
         List<String> equalShops2 = new ArrayList<>();
 
         if (endResults1==null) {
-            for (int i = 0; i < endResults1.size() / 4; i++) {
-                shopNamesSublist1.add(i, "0");
-                delcostSublist1.add(i, "0");
-                priceSublist1.add(i, "0");
-                linkSublist1.add(i, "");
-            }
+
+                shopNamesSublist1.add("0");
+                delcostSublist1.add("0");
+                priceSublist1.add("0");
+                linkSublist1.add("0");
+
 
         } else {
             shopNamesSublist1.addAll(endResults1.subList(0, endResults1.size() / 4));
@@ -485,12 +570,12 @@ public class DataProcessor {
         }
 
         if (endResults2==null) {
-            for (int i = 0; i < endResults1.size() / 4; i++) {
-                shopNamesSublist2.add(i, "0");
-                delcostSublist2.add(i, "0");
-                priceSublist2.add(i, "0");
-                linkSublist2.add(i, "");
-            }
+
+                shopNamesSublist2.add("0");
+                delcostSublist2.add("0");
+                priceSublist2.add("0");
+                linkSublist2.add("0");
+
 
         }
         else{
@@ -555,8 +640,16 @@ public class DataProcessor {
         System.out.println("\n \n \n \n" + "Wyniki:");
         if (equalShops2.isEmpty()) {
             double finMinPrice= final_price1.get(0) + final_price2.get(0);//po prostu najtansze
-            System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
-            System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
+            if(final_price1.get(0) == 0 && final_price2.get(0) == 0){
+                System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+                System.out.println("Produkt 2: Nie znaleziono produktu spełniającego podane kryteria");
+            }else if(final_price1.get(0) == 0){
+                System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+                System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
+            }else if(final_price2.get(0) == 0){
+                System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
+                System.out.println("Produkt 2: Nie znaleziono produktu spełniającego podane kryteria");
+            }
 
             System.out.println("Cena w sumie " + finMinPrice);
         }
@@ -589,15 +682,30 @@ public class DataProcessor {
             double finMinPrice = final_price1.get(0) + final_price2.get(0);
 
             if (finMinDelivPrice > finMinPrice) {
-                System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
-                System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
+                if(final_price1.get(0) == 0 && final_price2.get(0) == 0){
+                    System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 2: Nie znaleziono produktu spełniającego podane kryteria");
+                }else if(final_price1.get(0) == 0){
+                    System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
+                }else if(final_price2.get(0) == 0){
+                    System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
+                    System.out.println("Produkt 2: Nie znaleziono produktu spełniającego podane kryteria");
+                }
 
                 System.out.println("Cena w sumie " + finMinPrice);
             } else {
-                System.out.println("Produkt 1: " + final_priceMinDel1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
-                System.out.println("Produkt 2: " + final_priceMinDel2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
-
-                System.out.println("Cena w sumie: " + finMinDelivPrice);
+                if(final_price1.get(0) == 0 && final_price2.get(0) == 0){
+                    System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 2: Nie znaleziono produktu spełniającego podane kryteria");
+                }else if(final_price1.get(0) == 0){
+                    System.out.println("Produkt 1: Nie znaleziono produktu spełniającego podane kryteria");
+                    System.out.println("Produkt 2: " + final_price2.get(0) + " https://www.ceneo.pl" + linkSublist2.get(0));
+                }else if(final_price2.get(0) == 0){
+                    System.out.println("Produkt 1: " + final_price1.get(0) + " https://www.ceneo.pl" + linkSublist1.get(0));
+                    System.out.println("Produkt 2: Nie znaleziono produktu spełniającego podane kryteria");
+                }
+                    System.out.println("Cena w sumie: " + finMinDelivPrice);
             }
 
         }

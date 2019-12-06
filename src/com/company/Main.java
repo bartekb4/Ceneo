@@ -85,7 +85,7 @@ public class Main {
         Item cos = new Item();
 
         pralka.setName("xbox one");
-        suszarka.setName("fifa 20 xbox one");
+        suszarka.setName("bhbyhnkk");
         cos.setName("red dead redeption 2 xbox one");
  //0565cee8d226e513c73abc146619121e71dc116c
         pralka.setMin_price(0);
@@ -105,8 +105,13 @@ public class Main {
 
 
         try {
+            //dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation())
+                 //   ,dp2.request_product_soup(cc2,cc2.getItem().getMin_reputation()),dp3.request_product_soup(cc3,cc3.getItem().getMin_reputation()));
+            //dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation()));
+
+
             dp.find_best_deal_for_id(dp.request_product_soup(cc,cc.getItem().getMin_reputation())
-                    ,dp2.request_product_soup(cc2,cc2.getItem().getMin_reputation()),dp3.request_product_soup(cc3,cc3.getItem().getMin_reputation()));
+                    ,dp2.request_product_soup(cc2,cc2.getItem().getMin_reputation()));
             //dp2.find_best_deal_for_id(dp2.request_product_soup(cc1),cc1.getItem().getMin_reputation());//Troche spaghetti z tym min rep, ale na razie dziala
         } catch (HttpStatusException e) {
             searchException.userError("Co robisz bandyto","Halko");
